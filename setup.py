@@ -3,10 +3,10 @@
 
 from setuptools import setup
 
-with open('README.md', "rb") as f:
+with open("README.md", "rb") as f:
     LONG_DESCRIPTION = f.read().decode("utf-8")
     
-VERSION = __import__('docfly').__version__
+VERSION = __import__("docfly").__version__
 
 setup(
     name = "docfly",

@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = __import__('toppackage').__version__
+VERSION = __import__("toppackage").__version__
 
 setup(
     name = "toppackage",
