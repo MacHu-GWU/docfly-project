@@ -1,3 +1,8 @@
+# Developer setting
+*.pyc
+docfly/_source
+example-project/build
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
