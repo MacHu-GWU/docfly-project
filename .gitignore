@@ -1,7 +1,7 @@
 # Developer setting
 *.pyc
 docfly/_source
-example-project/build
+toppackage-project/build
 
 # Windows image file caches
 Thumbs.db
