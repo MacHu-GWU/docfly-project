@@ -98,3 +98,50 @@ Module Index
 
 ## 详细文档
 
+在docfly-project项目目录下, 有一个示例项目toppackage-project。我们下面以这个项目为例, 为这个项目建立一个标准化的文档网站。([成品网站Demo点这里](http://toppackage-project.readthedocs.org/en/latest/index.html))
+
+首先要确保成功安装了[sphinx](http://sphinx-doc.org/latest/install.html)
+
+首先进入docfly项目根目录
+
+```console
+$ cd docfly-project
+```
+
+安装docfly
+
+```console
+$ python setup.py build
+$ python setup.py install
+```
+
+安装toppackage
+
+```console
+$ cd toppackage-project
+$ python setup.py build
+$ python setup.py install
+```
+
+使用[sphinx入门教程](http://sphinx-doc.org/tutorial.html)中的sphinx-quickstart生成文档项目。确保有`make.bat`, `conf.py`, `index.rst`等这些由sphinx自动生成的文件。
+
+然后使用docfly生成文档书。
+
+首先建立一个Python文件, 例如`test.py`, 并填入如下内容。
+
+```python
+from docfly import Docfly
+
+docfly = Docfly("toppackage")
+docfly.fly()
+```
+
+执行之后, 则会在当前目录下生成一个`_source`文件夹, 里面有一个`toppackage`的文件夹, 将这个文件夹拷贝到sphinx的文档源文件所在的目录。即跟`conf.py`和`index.rst`文件在一个目录下。
+
+在此之后, 在`toppackage-project`目录下执行
+
+```console
+$ make html
+```
+
+然后打开build文件夹中的index.html文件, 即可看到自动生成的[index](http://toppackage-project.readthedocs.org/en/latest/genindex.html), [module index](http://toppackage-project.readthedocs.org/en/latest/py-modindex.html)页面, 查看API文档的索引了。

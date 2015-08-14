@@ -1,7 +1,10 @@
 # Developer setting
 *.pyc
-docfly/_source
+build
+dist
 toppackage-project/build
+toppackage-project/dist
+docfly/_source
 
 # Windows image file caches
 Thumbs.db
