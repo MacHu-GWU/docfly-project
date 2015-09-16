@@ -8,12 +8,13 @@ class DocflyError(Exception):
     pass
 
 class Docfly():
-    def __init__(self, package_name):
+    def __init__(self, package_name, dst="_source"):
         self.package = Package(package_name)
+        self.dst = dst
         
     def fly(self):
-        dst = "_source"
-
+        dst = self.dst
+        
         try:
             os.mkdir(dst)
         except:
