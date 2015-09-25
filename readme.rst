@@ -8,7 +8,7 @@ QuickLink:
 - `Home page <https://github.com/MacHu-GWU/docfly-project>`_
 - `PyPI download <https://pypi.python.org/pypi/docfly>`_
 - `English document <https://pypi.python.org/pypi/docfly>`_
-- `Chinese document <https://github.com/MacHu-GWU/docfly-project>`_
+- `Chinese document <https://github.com/MacHu-GWU/docfly-project/blob/master/chinese_readme.rst>`_
 - `Step by Step example <more_example_>`_
 - `Install <install_>`_
 
