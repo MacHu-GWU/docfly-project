@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
 Welcome to docfly documentation
 ================================================================================
 
@@ -13,6 +9,7 @@ QuickLink:
 - `PyPI download <https://pypi.python.org/pypi/docfly>`_
 - `English document <https://pypi.python.org/pypi/docfly>`_
 - `Chinese document <https://github.com/MacHu-GWU/docfly-project>`_
+- `Step by Step example <more_example_>`_
 - `Install <install_>`_
 
 Notice, everything below here is tested in Windows, and mostly also works for Linux, Unix and Mac.
@@ -23,12 +20,12 @@ Introduction
 
 I assume you already know how to use `sphinx <http://sphinx-doc.org/>`_ to build your own document site. After you run: ``$ sphinx-quickstart``, you may see this in the ``index.rst`` file::
 
-    Indices and tables
-    ==================
+	Indices and tables
+	==================
 
-    * :ref:`genindex`
-    * :ref:`modindex`
-    * :ref:`search`
+	* :ref:`genindex`
+	* :ref:`modindex`
+	* :ref:`search`
 
 This piece is for built-in automate tools ``sphinx.ext.autodoc`` to generate doc from your docstring. 
 
@@ -45,10 +42,10 @@ And everything you need, is to run `a little python script <https://github.com/M
 
 .. code-block:: python
 
-    from docfly import Docfly
+	from docfly import Docfly
 
-    docfly = Docfly("sqlite4dummy", dst="source") # define the package name, make sure it's importable
-    docfly.fly()
+	docfly = Docfly("sqlite4dummy", dst="source") # define the package name, make sure it's importable
+	docfly.fly()
 
 BOOM! Now you got not only the nicely structured API reference document, but also the ability to link any module, package, function, class, method's doc anywhere you want. Just use the `python domain markup <http://sphinx-doc.org/domains.html#the-python-domain>`_, like: ``:class:`<package.module.class>```.
 
@@ -60,9 +57,9 @@ OK, OK, I gonna reveal the magic behind this now.
 
 .. code-block:: python
 
-    from docfly import Docfly
+	from docfly import Docfly
 
-    docfly = Docfly(package_name="sqlite4dummy", dst="source", ignore=[])
+	docfly = Docfly(package_name="sqlite4dummy", dst="source", ignore=[])
 
 Docfly class has three initiation parameters:
 
@@ -74,40 +71,43 @@ So basically what you do is to set your destination (dst) to the directory of yo
 
 **docfly makes doc fly.**
 
+.. _more_example:
 
 More example
 --------------------------------------------------------------------------------
+
+If you finished this section, you will get a doc sites like `THIS <http://toppackage-project.readthedocs.org/en/latest/>`_
 
 You can download the source code at https://github.com/MacHu-GWU/docfly-project/archive/master.zip. There's an example project ``toppackage``, you can try build a easy doc sites for ``toppackage``. You can follow these steps:
 
 1. Install example package ``toppackage``::
 
-        $ cd docfly-project\toppackage-project
-        $ python setup.py build
-        $ python setup.py install
+		$ cd docfly-project\toppackage-project
+		$ python setup.py build
+		$ python setup.py install
 
 2. Then install ``docfly``::
 
-        $ pip install docfly
-        or
-        $ cd docfly-project
-        $ python setup.py build
-        $ python setup.py install
+		$ pip install docfly
+		or
+		$ cd docfly-project
+		$ python setup.py build
+		$ python setup.py install
 
 3. Then run ``create_doctree.py``::
 
-        $ cd docfly-project\toppackage-project
-        $ python create_doctree.py
+		$ cd docfly-project\toppackage-project
+		$ python create_doctree.py
 
 4. Then build the doc site::
 
-        $ cd docfly-project\toppackage-project
-        $ make html
+		$ cd docfly-project\toppackage-project
+		$ make html
 
 5. Then go enjoy your doc site::
 
-        $ cd docfly-project\toppackage-project\build\html
-        $ index.html
+		$ cd docfly-project\toppackage-project\build\html
+		$ index.html
 
 
 .. _install:
@@ -119,15 +119,10 @@ Install
 
 .. code-block:: console
 
-    $ pip install docfly
+	$ pip install docfly
 
 To upgrade to latest version:
 
 .. code-block:: console
-    
-    $ pip install --upgrade docfly
-"""
-
-from .fly import Docfly
-
-__version__ = "0.0.1"
+	
+	$ pip install --upgrade docfly

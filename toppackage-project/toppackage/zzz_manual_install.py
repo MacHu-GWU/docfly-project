@@ -3,7 +3,7 @@
 
 """
 Install your own package in one seconds! (Windows System Only!)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Put this script in your package directory, for example::
 
@@ -18,7 +18,7 @@ Put this script in your package directory, for example::
         |---zzz_manual_install.py <=== put it here
         
 Run this script as the main script. Then your package is automatically installed 
-and replace the old one for all Python versions on your WINDOWS computer.
+and replace the old one for all Python versions on your ``WINDOWS`` computer.
 
 This feature is extremely useful when you need refresh your package over and 
 over again. But if you want to make an official release, you should make a 
@@ -36,7 +36,7 @@ setup.py and build the distribution by yourself. Read the following instruction:
 
 **Warning**: with python2, the project directory cannot have non-ascil char.
 
-------
+-------------------------------------------------------------------------------
 
 **中文文档**
 
@@ -54,10 +54,10 @@ setup.py and build the distribution by yourself. Read the following instruction:
     C:\Python27\Lib\site-packages\mypackage
     C:\Python33\Lib\site-packages\mypackage
     
-然后你就可以用``import mypackage``调用你写的库了。
+然后你就可以用 ``import mypackage`` 调用你写的库了。
 
-这一功能在调试阶段非常方便, 但最终发布时还是要通过写``setup.py``文件来制作package
-的安装包。这一部分可以参考:
+这一功能在调试阶段非常方便, 但最终发布时还是要通过写 ``setup.py`` 文件来制作
+package的安装包。这一部分可以参考:
 
 - Python2:
 
@@ -72,13 +72,13 @@ setup.py and build the distribution by yourself. Read the following instruction:
 注: 项目目录在python2中不允许有中文路径。
 
 About
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Copyright (c) 2015 by Sanhe Hu**
 
 - Author: Sanhe Hu
 - Email: husanhe@gmail.com
-- Lisence: LGPL
+- Lisence: MIT
 
 
 **Compatibility**
@@ -92,13 +92,13 @@ About
 - None
 
 class, method, func, exception
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 from __future__ import print_function, unicode_literals
 
 def install():
-    """Install your package to all python version you have installed on Windows.
+    """Install your package to all Python version you have installed on Windows.
     """
     import os, shutil
     

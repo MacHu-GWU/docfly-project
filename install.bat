@@ -1,5 +1,4 @@
 pushd "%~dp0"
-cd toppackage
+cd docfly
 python zzz_manual_install.py
-cd ..
-make html
+pause
