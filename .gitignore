@@ -4,8 +4,6 @@ build
 dist
 toppackage-project/build
 toppackage-project/dist
-toppackage-project/source/toppackage
-docfly/_source
 
 # Windows image file caches
 Thumbs.db
