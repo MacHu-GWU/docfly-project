@@ -131,3 +131,5 @@ To upgrade to latest version:
 from .fly import Docfly
 
 __version__ = "0.0.1"
+__short_description__ = ("A pure python package to help you build fancy "
+                         "searchable, auto-generated API reference document.")

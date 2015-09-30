@@ -62,7 +62,7 @@ VERSION = __import__(NAME).__version__
 PACKAGES = [NAME] + ["%s.%s" % (NAME, i) for i in find_packages(NAME)]
 PACKAGE_DATA = {
 }
-SHORT_DESCRIPTION = "A pure python package to help you build fancy searchable, auto-generated API reference document." # GitHub Short Description
+SHORT_DESCRIPTION = __import__(NAME).__short_description__ # GitHub Short Description
 AUTHOR = "Sanhe Hu"
 AUTHOR_EMAIL = "husanhe@gmail.com"
 MAINTAINER = AUTHOR
@@ -94,6 +94,9 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.4",
 ]
 
+with open("requirements.txt", "rb") as f:
+    REQUIRES = [i.strip() for i in f.read().decode("utf-8").split("\n")]
+    
 setup(
     name = NAME,
     packages = PACKAGES,
@@ -111,4 +114,5 @@ setup(
     classifiers = CLASSIFIERS,
     platforms = PLATFORMS,
     license = LICENSE,
+    install_requires = REQUIRES,
 )
