@@ -34,7 +34,7 @@ Let's take a look at one of the most successful open source Python project ``req
 
 God, even though you can use ``..autoclass::``, ``..autofunction::`` to generate docs, but you still need to type it in the ``api.rst`` file manually. **Is there any way we can make it easier and EVEN BETTER?**, YES, that is what **docfly** for.
 
-Now let's see an example project built with docfly: http://sqlite4dummy-project.readthedocs.org/py-modindex.html
+Now let's see an example project built with docfly: http://www.wbh-doc.com.s3.amazonaws.com/sqlite4dummy/py-modindex.html
 
 See that tree structure of the modules and subpackages? If you click on a package, then it jump to a page with the docstring in ``package.__init__.py`` and link for its sub-subpackage and modules.
 

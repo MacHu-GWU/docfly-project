@@ -1,3 +1,17 @@
+# =========================
+# User Setting
+# =========================
+
+# File
+*.pyc
+
+# Directory
+build
+dist
+docfly.egg-info
+
+# =========================
+
 # Developer setting
 *.pyc
 build

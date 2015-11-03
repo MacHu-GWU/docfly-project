@@ -94,7 +94,7 @@ docfly的使用方法
 
 	from docfly import Docfly
 
-	docfly = Docfly("toppackage")
+	docfly = Docfly("toppackage", dst="_source")
 	docfly.fly()
 
 执行之后, 则会在当前目录下生成一个 ``_source`` 文件夹, 里面有一个 ``toppackage`` 的文件夹, 将这个文件夹拷贝到sphinx的文档源文件所在的目录。 即跟 ``conf.py`` 和 ``index.rst`` 文件在一个目录下。

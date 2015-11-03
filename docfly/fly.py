@@ -16,7 +16,7 @@ import os
 class DocflyError(Exception):
     pass
 
-class Docfly():
+class Docfly(object):
     """The docfly main class.
 
     :param package_name: the importable package name
@@ -82,7 +82,7 @@ class Docfly():
         根据全名判断一个包或者模块是否需要被ignore.
         """
         for pattern in self.ignore:
-            if pattern == mod_or_pkg.fullname:
+            if mod_or_pkg.fullname.startswith(pattern):
                 return True
         return False
     
