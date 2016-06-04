@@ -1,14 +1,15 @@
 subpackage2
 ===========
 
-.. automodule:: toppackage.subpackage2
-	:members:
+.. automodule:: subpackage2
+    :members:
 
-subpackage and modules
-----------------------
+sub packages and modules
+------------------------
 
 .. toctree::
    :maxdepth: 1
 
-	module21 <module21>
-	module22 <module22>
+    module21 <module21>
+    module22 <module22>
+    

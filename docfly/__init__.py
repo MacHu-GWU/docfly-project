@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .fly import Docfly
+__version__ = "0.0.3"
+__short_description__ = "A utility tool to help you build better sphinx documents"
+__license__ = "MIT"
 
-__version__ = "0.0.2"
-__short_description__ = ("A pure python package to help you build fancy "
-                         "searchable, auto-generated API reference document.")
+from .api_reference_doc import ApiReferenceDoc
+from .doctree import DocTree

@@ -1,11 +1,23 @@
-from __future__ import print_function
-from docfly import Docfly
-import shutil
- 
-try:
-    shutil.rmtree(r"source\toppackage")
-except Exception as e:
-    print(e)
-     
-docfly = Docfly("toppackage", dst="source")
-docfly.fly()
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+This script can create python module doc tree.
+"""
+
+import docfly
+
+doc = docfly.DocTree("source")
+doc.fly()
+
+package_name = "toppackage"
+
+doc = docfly.ApiReferenceDoc(
+    package_name,
+    dst="source",
+    ignore=[
+        "%s.packages" % package_name,
+        "%s.zzz_manual_install.py" % package_name,
+    ]
+)
+doc.fly()

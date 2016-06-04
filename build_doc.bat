@@ -1,4 +1,6 @@
 pushd "%~dp0"
 cd docfly
 python3 zzz_manual_install.py
-pause
+cd ..
+python3 create_doctree.py
+make html
