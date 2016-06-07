@@ -1,6 +1,3 @@
-.. image:: https://img.shields.io/badge/Last_Update-2016--06--01-brightgreen.svg
-
-
 .. _Sanhe_sphinx_doc_project_style_guide:
 
 Sanhe's Sphinx文档项目规范
