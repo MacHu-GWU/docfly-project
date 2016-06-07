@@ -12,11 +12,9 @@ import jinja2
 
 try:
     from .packages.member import Package, Module
-except:
-    from docfly.packages.member import Package, Module
-try:
     from .template import template_collection as tc
 except:
+    from docfly.packages.member import Package, Module
     from docfly.template import template_collection as tc
 
 
