@@ -1,7 +1,7 @@
 {{ package.name }}
 {{ "=" * package.name|length }}
 
-.. automodule:: {{ package.name }}
+.. automodule:: {{ package.fullname }}
     :members:
 
 sub packages and modules

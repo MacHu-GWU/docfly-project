@@ -1,7 +1,7 @@
 subpackage1
 ===========
 
-.. automodule:: subpackage1
+.. automodule:: toppackage.subpackage1
     :members:
 
 sub packages and modules

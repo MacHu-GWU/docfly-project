@@ -44,21 +44,22 @@ class DocTree(object):
         return dir_list
 
     @staticmethod
+    def get_title(abspath):
+        lastline = None
+        for line in textfile.readlines(abspath, strip="both"):
+            if (line == "=" * len(line)) and (len(line) >= 1):
+                return lastline.strip()
+            else:
+                lastline = line
+        return None
+        
+    @staticmethod
     def process(dir_path):
-        def get_title(abspath):
-            lastline = None
-            for line in textfile.readlines(abspath, strip="both"):
-                if line == "=" * len(line):
-                    return lastline.strip()
-                else:
-                    lastline = line
-            return None
-
         article_list = list()
 
         for sub_dir_path in DocTree.get_doc_dir_list(dir_path):
             abspath = os.path.join(sub_dir_path, "content.rst")
-            title = get_title(abspath)
+            title = DocTree.get_title(abspath)
             path = os.path.basename(sub_dir_path) + "/index.rst"
             article = Article(title=title, path=path)
             article_list.append(article)
