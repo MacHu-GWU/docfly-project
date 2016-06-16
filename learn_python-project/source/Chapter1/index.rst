@@ -1,8 +1,8 @@
 .. include:: content.rst
 
 
-Table of Content (目录)
------------------------
+Table of Content
+-------------------------------------------------------------------------------
 .. toctree::
    :maxdepth: 1
 

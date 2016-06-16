@@ -58,16 +58,10 @@ class ApiReferenceDoc(object):
 
         # delete everything already exists
         package_dir = os.path.join(os.path.abspath(dst), self.package_name)
-        if os.path.isdir(package_dir):
-            for path in os.listdir(package_dir):
-                try:
-                    abspath = os.path.join(dst, path)
-                    if os.path.isdir(abspath):
-                        shutil.rmtree(abspath)
-                    elif os.path.isfile(abspath):
-                        os.remove(abspath)
-                except Exception as e:
-                    print("'%s' can't be removed! Error: %s" % (path, e))
+        try:
+            shutil.rmtree(package_dir)
+        except Exception as e:
+            print("'%s' can't be removed! Error: %s" % (package_dir, e))
 
         # create .rst files
         for pkg, parent, fullname, sub_packages, sub_modules in self.package.walk():
@@ -143,7 +137,7 @@ class ApiReferenceDoc(object):
 
         """
         if isinstance(package, Package):
-            return jinja2.Template(tc.package).render(package=package)
+            return jinja2.Template(tc.package).render(package=package, isignored=self.isignored)
         else:
             raise Exception("%r is not a Package object" % package)
 

@@ -2,4 +2,4 @@ doctree
 =======
 
 .. automodule:: docfly.doctree
-	:members:
+    :members:

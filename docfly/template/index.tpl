@@ -1,8 +1,8 @@
 .. include:: content.rst
 
 {% if has_toc %}
-Table of Content (目录)
------------------------
+{{ table_of_content_header }}
+-------------------------------------------------------------------------------
 .. toctree::
    :maxdepth: 1
 
