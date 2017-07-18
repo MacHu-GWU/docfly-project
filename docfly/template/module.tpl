@@ -1,5 +1,5 @@
-{{ module.name}}
-{{ "=" * module.name|length }}
+{{ module.shortname}}
+{{ "=" * module.shortname|length }}
 
 .. automodule:: {{ module.fullname }}
     :members:

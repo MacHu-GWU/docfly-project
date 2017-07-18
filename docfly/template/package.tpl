@@ -1,5 +1,5 @@
-{{ package.name }}
-{{ "=" * package.name|length }}
+{{ package.shortname }}
+{{ "=" * package.shortname|length }}
 
 .. automodule:: {{ package.fullname }}
     :members:
@@ -11,12 +11,12 @@ sub packages and modules
    :maxdepth: 1
 
     {% for pkg in package.sub_packages.values() -%}
-    {% if not isignored(pkg) -%}
-    {{ pkg.name }} <{{ pkg.name }}/__init__>
+    {% if not is_ignored(pkg, ignored_package) -%}
+    {{ pkg.shortname }} <{{ pkg.shortname }}/__init__>
     {% endif -%}
     {% endfor -%}
     {% for mod in package.sub_modules.values() -%}
-    {% if not isignored(mod) -%}
-    {{ mod.name }} <{{ mod.name }}>
+    {% if not is_ignored(mod, ignored_package) -%}
+    {{ mod.shortname }} <{{ mod.shortname }}>
     {% endif -%}
     {% endfor -%}

@@ -8,18 +8,73 @@
 from __future__ import print_function
 import os
 import shutil
-import jinja2
-
+from pathlib_mate import Path
 try:
-    from .packages.member import Package, Module
-    from .template import template_collection as tc
+    from .util import make_dir, make_file
+    from .template import TC
+    from .pkg.picage import Package, Module
 except:
-    from docfly.packages.member import Package, Module
-    from docfly.template import template_collection as tc
+    from docfly.util import make_dir, make_file
+    from docfly.template import TC
+    from docfly.pkg.picage import Package, Module
+
+
+def module_render(self):
+    return TC.module.render(module=self)
+
+
+Module.render = module_render
+
+
+def is_ignored(mod_or_pkg, ignored_package):
+    """Test, if this :class:`docfly.pkg.picage.Module` 
+    or :class:`docfly.pkg.picage.Package` should be included to generate 
+    API reference document.
+
+    :param mod_or_pkg: module or package
+    :param ignored_package: ignored package
+
+    **中文文档**
+
+    根据全名判断一个包或者模块是否要被包含到自动生成的API文档中。
+    """
+    ignored_pattern = list()
+    for pkg_fullname in ignored_package:
+        if pkg_fullname.endswith(".py"):
+            pkg_fullname = pkg_fullname[:-3]
+            ignored_pattern.append(pkg_fullname)
+        else:
+            ignored_pattern.append(pkg_fullname)
+
+    for pattern in ignored_pattern:
+        if mod_or_pkg.fullname.startswith(pattern):
+            return True
+    return False
+
+
+def package_render(self, ignored_package):
+    return TC.package.render(
+        package=self, ignored_package=ignored_package, is_ignored=is_ignored)
+
+
+Package.render = package_render
 
 
 class ApiReferenceDoc(object):
     """A class used to generate sphinx-doc api reference part.
+
+    Example::
+
+        package
+        |--- subpackage1
+            |--- __init__.rst
+            |--- module.rst
+        |--- subpackage2
+            |--- __init__.rst
+            |--- module.rst
+        |--- __init__.rst
+        |--- module1.rst
+        |--- module2.rst
 
     :param package_name: the importable package name
     :type package_name: string
@@ -37,14 +92,18 @@ class ApiReferenceDoc(object):
     ``docfly.zzz_manual_install.py``
     """
 
-    def __init__(self, package_name, dst="_source", ignore=[]):
-        if "." in package_name:
-            raise Exception("package_name has to be a root package.")
-
-        self.package_name = package_name
+    def __init__(self, package_name, dst="_source", ignored_package=None):
         self.package = Package(package_name)
         self.dst = dst
-        self.ignore = [i.replace(".py", "") for i in ignore]
+
+        if ignored_package is None:
+            ignored_package = list()
+        self.ignored_package = list()
+        for pkg_fullname in ignored_package:
+            if pkg_fullname.endswith(".py"):
+                self.ignored_package.append(pkg_fullname[:-3])
+            else:
+                self.ignored_package.append(pkg_fullname)
 
     def fly(self):
         """Generate doc tree.
@@ -56,43 +115,31 @@ class ApiReferenceDoc(object):
         except:
             pass
 
-        # delete everything already exists
-        package_dir = os.path.join(os.path.abspath(dst), self.package_name)
+        package_dir = Path(dst, self.package.shortname)
+
+        # delete existsing api document
         try:
-            shutil.rmtree(package_dir)
+            if package_dir.exists():
+                shutil.rmtree(package_dir.abspath)
         except Exception as e:
             print("'%s' can't be removed! Error: %s" % (package_dir, e))
 
         # create .rst files
-        for pkg, parent, fullname, sub_packages, sub_modules in self.package.walk():
+        for pkg, parent, sub_packages, sub_modules in self.package.walk():
 
-            if not self.isignored(pkg):
-                dir_path = os.path.join(*(
-                    [dst, ] + fullname.split(".")
-                ))
-                init_path = os.path.join(dir_path, "__init__.rst")
+            if not is_ignored(pkg, self.ignored_package):
+                dir_path = Path(*([dst, ] + pkg.fullname.split(".")))
+                init_path = Path(dir_path, "__init__.rst")
 
-                self.make_dir(dir_path)
-                self.make_file(init_path, self.generate_package_content(pkg))
+                self.make_dir(dir_path.abspath)
+                self.make_file(
+                    init_path.abspath, self.generate_package_content(pkg))
 
                 for mod in sub_modules:
-                    if not self.isignored(mod):
-                        module_path = os.path.join(dir_path, mod.name + ".rst")
+                    if not is_ignored(mod, self.ignored_package):
+                        module_path = Path(dir_path, mod.shortname + ".rst")
                         self.make_file(
-                            module_path, self.generate_module_content(mod))
-
-    def isignored(self, mod_or_pkg):
-        """Find whether if we need include a :class:`docfly.packages.member.Package` or
-        :class:`docfly.packages.member.Module`.
-
-        **中文文档**
-
-        根据全名判断一个包或者模块是否需要被ignore.
-        """
-        for pattern in self.ignore:
-            if mod_or_pkg.fullname.startswith(pattern):
-                return True
-        return False
+                            module_path.abspath, self.generate_module_content(mod))
 
     def make_dir(self, abspath):
         """Make an empty directory.
@@ -137,7 +184,7 @@ class ApiReferenceDoc(object):
 
         """
         if isinstance(package, Package):
-            return jinja2.Template(tc.package).render(package=package, isignored=self.isignored)
+            return package.render(ignored_package=self.ignored_package)
         else:
             raise Exception("%r is not a Package object" % package)
 
@@ -153,17 +200,48 @@ class ApiReferenceDoc(object):
                 :members:
         """
         if isinstance(module, Module):
-            return jinja2.Template(tc.module).render(module=module)
+            return module.render()
         else:
             raise Exception("%r is not a Module object" % module)
 
 
 if __name__ == "__main__":
-    doc = ApiReferenceDoc("toppackage", dst="_source",
-                          ignore=[
-                              "toppackage.subpackage1",
-                              "toppackage.module2.py",
-                              "toppackage.subpackage2.module22.py",
-                          ],
-                          )
+    def test_is_ignored():
+        ignored_package = [
+            "toppackage.subpackage1",
+            "toppackage.subpackage2.module22.py",
+            "toppackage.module2.py",
+        ]
+        assert is_ignored(
+            Package("toppackage"), ignored_package) is False
+        assert is_ignored(
+            Package("toppackage.subpackage1"), ignored_package) is True
+        assert is_ignored(
+            Module("toppackage.subpackage1.module11"), ignored_package) is True
+        assert is_ignored(
+            Module("toppackage.subpackage1.module12"), ignored_package) is True
+
+        assert is_ignored(
+            Package("toppackage.subpackage2"), ignored_package) is False
+        assert is_ignored(
+            Module("toppackage.subpackage2.module21"), ignored_package) is False
+        assert is_ignored(
+            Module("toppackage.subpackage2.module22"), ignored_package) is True
+
+        assert is_ignored(
+            Module("toppackage.module1"), ignored_package) is False
+        assert is_ignored(
+            Module("toppackage.module2"), ignored_package) is True
+
+    test_is_ignored()
+
+    doc = ApiReferenceDoc(
+        "toppackage",
+        dst="_source",
+        ignored_package=[
+            "toppackage.subpackage1",
+            "toppackage.subpackage2.module22.py",
+            "toppackage.module2.py",
+        ],
+    )
     doc.fly()

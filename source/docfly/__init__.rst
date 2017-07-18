@@ -13,4 +13,5 @@ sub packages and modules
     template <template/__init__>
     api_reference_doc <api_reference_doc>
     doctree <doctree>
+    util <util>
     
