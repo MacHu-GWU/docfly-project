@@ -13,17 +13,9 @@ import os
 import zlib
 
 try:
-    import chardet
-except ImportError as e:
-    import sys
-    err_msg = ("Warning: '%s', ``smartread`` method is not available. "
-               "install 'chardet' to activate this feature.") % e
-    sys.stderr.write(err_msg)
-
-try:
-    from .py23 import int_type
+    from .sixmini import integer_types
 except:
-    from dataIO.py23 import int_type
+    from docfly.pkg.sixmini import integer_types
 
 
 def is_gzip_file(abspath):
@@ -79,15 +71,6 @@ def readbytes(path):
         return f.read()
 
 
-def smartread(path):
-    """Read text from file, automatically detect encoding. ``chardet`` required.
-    """
-    with open(path, "rb") as f:
-        content = f.read()
-        result = chardet.detect(content)
-        return content.decode(result["encoding"])
-
-
 def to_utf8(path, output_path=None):
     """Convert any text file to utf8 encoding.
     """
@@ -99,7 +82,7 @@ def to_utf8(path, output_path=None):
     write(text, output_path)
 
 
-#--- Text file line reader ---
+# --- Text file line reader ---
 def no_strip(s):
     return s
 
@@ -124,7 +107,8 @@ _strip_method_mapping = {
 }
 
 
-def readlines(path, encoding="utf-8", skiplines=None, nlines=None, strip='right'):
+def readlines(path, encoding="utf-8", skiplines=None, nlines=None,
+              strip='right'):
     """skip n lines and fetch the next n lines.
 
     :param skiplines: default None, skip first n lines
@@ -155,7 +139,8 @@ def readlines(path, encoding="utf-8", skiplines=None, nlines=None, strip='right'
                 yield strip_func(line.decode(encoding))
 
 
-def readchunks(path, encoding="utf-8", skiplines=None, chunksize=None, strip='right'):
+def readchunks(path, encoding="utf-8", skiplines=None, chunksize=None,
+               strip='right'):
     """skip n lines and fetch the next n lines as a chunk, and repeat fetching.
 
     :param skiplines: default None, skip first n lines
@@ -180,7 +165,7 @@ def readchunks(path, encoding="utf-8", skiplines=None, chunksize=None, strip='ri
 
         if chunksize is None:
             chunksize = 1
-        elif not isinstance(chunksize, int_type):
+        elif not isinstance(chunksize, integer_types):
             raise ValueError("'chunksize' has to be None or an integer.")
 
         chunk = list()

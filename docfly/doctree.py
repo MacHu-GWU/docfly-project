@@ -41,14 +41,15 @@ class DocTree(object):
     """A DocTree structure following
     :ref:`Sanhe Sphinx standard <Sanhe_sphinx_doc_project_style_guide>`.
     """
+    content_file = "_content.rst"
 
-    def __init__(self, dir_path):
+    def __init__(self, dir_path, content_file="_content.rst"):
+        self.content_file = content_file
         if self.is_doc_dir(dir_path) is False:
             raise Exception
         self.dir_path = dir_path
 
-    @staticmethod
-    def is_doc_dir(dir_path):
+    def is_doc_dir(self, dir_path):
         """
 
         **中文文档**
@@ -57,13 +58,12 @@ class DocTree(object):
 
         - 文件目录下是否有一个 ``content.rst`` 文件。
         """
-        if os.path.exists(join(dir_path, "content.rst")):
+        if os.path.exists(join(dir_path, self.content_file)):
             return True
         else:
             return False
 
-    @staticmethod
-    def get_doc_dir_list(dir_path):
+    def get_doc_dir_list(self, dir_path):
         """
 
         **中文文档**
@@ -74,7 +74,7 @@ class DocTree(object):
         dir_list = list()
         for path in os.listdir(dir_path):
             abspath = join(dir_path, path)
-            if DocTree.is_doc_dir(abspath):
+            if self.is_doc_dir(abspath):
                 dir_list.append(abspath)
         return dir_list
 
@@ -105,8 +105,7 @@ class DocTree(object):
 
         return None
 
-    @staticmethod
-    def process(dir_path, table_of_content_header):
+    def process(self, dir_path, table_of_content_header):
         """
 
         **中文文档**
@@ -115,15 +114,15 @@ class DocTree(object):
         """
         article_list = list()
 
-        for sub_dir_path in DocTree.get_doc_dir_list(dir_path):
-            abspath = join(sub_dir_path, "content.rst")
+        for sub_dir_path in self.get_doc_dir_list(dir_path):
+            abspath = join(sub_dir_path, self.content_file)
             title = DocTree.get_title(abspath)
             path = os.path.basename(sub_dir_path) + "/index.rst"
             article = Article(title=title, path=path)
             article_list.append(article)
 
         # read content from content.rst
-        content = textfile.read(join(dir_path, "content.rst"))
+        content = textfile.read(join(dir_path, self.content_file))
 
         # replace ``.. articles::`` directives
         content = content.replace(
@@ -137,13 +136,7 @@ class DocTree(object):
         # write to index.rst
         make_file(join(dir_path, "index.rst"), content)
 
-    def fly(self, table_of_content_header="Table of Content (目录)"):
+    def fly(self, table_of_content_header="Table of Content"):
         for current_dir, dir_list, file_list in os.walk(self.dir_path):
             if self.is_doc_dir(current_dir):
                 self.process(current_dir, table_of_content_header)
-
-
-if __name__ == "__main__":
-    dir_path = r"C:\Users\shu\PycharmProjects\py34\docfly-project\source"
-    doc = DocTree(dir_path)
-    doc.fly(table_of_content_header="Table of Content (目录)")

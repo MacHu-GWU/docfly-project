@@ -4,7 +4,6 @@
 from __future__ import print_function, unicode_literals
 import os
 import sys
-import site
 import string
 import platform
 from collections import OrderedDict
@@ -15,20 +14,28 @@ Tab = " " * 4
 
 
 def get_sp_dir():
-    """Get the absolute path of the ``site-packages`` directory. 
-
-    .. note::
-
-        For now, virtualenv doesn't take into account.
+    """Get the absolute path of the ``site-packages`` directory.
     """
-    system = platform.system()
-    if system == "Windows":
-        sp_dir = site.getsitepackages()[1]
-    elif system == "Darwin":
-        sp_dir = site.getsitepackages()[0]
-    elif system == "Linux":
-        sp_dir = site.getsitepackages()[0]
-    return sp_dir
+    py_ver_major = sys.version_info.major
+    py_ver_minor = sys.version_info.minor
+
+    system_name = platform.system()
+    if system_name == "Windows":
+        site_packages_path = os.path.join(
+            os.path.dirname(sys.executable),
+            "Lib",
+            "site-packages",
+        )
+    elif system_name in ["Darwin", "Linux"]:
+        site_packages_path = os.path.join(
+            os.path.dirname(os.path.dirname(sys.executable)),
+            "lib",
+            "python%s.%s" % (py_ver_major, py_ver_minor),
+            "site-packages",
+        )
+    else:
+        raise Exception("Unknown Operation System!")
+    return site_packages_path
 
 
 SP_DIR = get_sp_dir()
@@ -73,7 +80,7 @@ class BaseModuleOrPackage(object):
 
     @property
     def shortname(self):
-        """Example: for package ``sphinx.environment.adapter``, 
+        """Example: for package ``sphinx.environment.adapter``,
         it's ``adapter``.
         """
         if "." in self.name:
@@ -103,7 +110,7 @@ class Module(BaseModuleOrPackage):
 
 
 class Package(object):
-    """Represent a package object in Python. It is a directory having a 
+    """Represent a package object in Python. It is a directory having a
     ``__init__.py`` file.
 
     :param name: dot seperated full name, for example: "sphinx.environment".
@@ -159,7 +166,7 @@ class Package(object):
 
     @property
     def shortname(self):
-        """Example: for package ``sphinx.environment.adapter``, 
+        """Example: for package ``sphinx.environment.adapter``,
         it's ``adapter``.
         """
         if "." in self.name:
