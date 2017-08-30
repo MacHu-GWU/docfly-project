@@ -46,7 +46,7 @@ class DocTree(object):
     def __init__(self, dir_path, content_file="_content.rst"):
         self.content_file = content_file
         if self.is_doc_dir(dir_path) is False:
-            raise Exception
+            raise Exception("'%s' is not a valid source doc directory!" % dir_path)
         self.dir_path = dir_path
 
     def is_doc_dir(self, dir_path):
