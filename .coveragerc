@@ -1,4 +1,4 @@
 [run]
 omit =
-    elementary_math/pkg/*
-    elementary_math/zzz_ezinstall.py
+    docfly/pkg/*
+    docfly/zzz_ezinstall.py
