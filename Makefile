@@ -47,6 +47,11 @@ PY_VER_MAJOR="2"
 PY_VER_MINOR="7"
 PY_VER_PATCH="13"
 
+TEST_PY_VER2="3.4.6"
+TEST_PY_VER3="3.5.3"
+TEST_PY_VER4="3.6.2"
+TEST_PY_VER5=""
+
 # Virtualenv Name
 VENV_NAME="${PACKAGE_NAME}_venv"
 
@@ -105,6 +110,7 @@ clean: ## Clean Up Virtual Environment
 #--- Install ---
 .POHNY: install
 install: ## Install This Package via setup.py
+	${BIN_PIP} uninstall -y ${PACKAGE_NAME}
 	${BIN_PIP} install --ignore-installed .
 
 .PHONY: enstall
@@ -118,10 +124,15 @@ test: install ## Run test
 	${BIN_PIP} install pytest
 	${BIN_PYTEST} tests -s
 
+.PHONY: cov
+cov: enstall ## Run Code Coverage test
+	${BIN_PIP} install pytest-cov
+	${BIN_PYTEST} tests -s --cov=${PACKAGE_NAME}
+
 .PHONY: tox
 tox: ## Run tox
 	( \
-		pyenv shell 2.7.13 3.4.6 3.5.3 3.6.2; \
+		pyenv local ${PY_VERSION} ${TEST_PY_VER2} ${TEST_PY_VER3} ${TEST_PY_VER4} ${TEST_PY_VER5}; \
 		tox; \
 	)
 
