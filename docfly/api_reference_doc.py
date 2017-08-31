@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-
+Create api reference doc.
 """
 
 from __future__ import print_function
@@ -27,8 +27,8 @@ Module.render = module_render
 
 
 def is_ignored(mod_or_pkg, ignored_package):
-    """Test, if this :class:`docfly.pkg.picage.Module` 
-    or :class:`docfly.pkg.picage.Package` should be included to generate 
+    """Test, if this :class:`docfly.pkg.picage.Module`
+    or :class:`docfly.pkg.picage.Package` should be included to generate
     API reference document.
 
     :param mod_or_pkg: module or package
@@ -79,7 +79,7 @@ class ApiReferenceDoc(object):
     :param package_name: the importable package name
     :type package_name: string
 
-    :param dst: default "_source", the directory you want to put doc files 
+    :param dst: default "_source", the directory you want to put doc files
     :type dst: string
 
     :param ignore: default empty list, package, module prefix you want to ignored
@@ -88,7 +88,7 @@ class ApiReferenceDoc(object):
     **中文文档**
 
     如果你需要忽略一个包: 请使用 ``docfly.packages``
-    如果你需要忽略一个模块: 请使用 ``docfly.zzz_manual_install`` 或 
+    如果你需要忽略一个模块: 请使用 ``docfly.zzz_manual_install`` 或
     ``docfly.zzz_manual_install.py``
     """
 

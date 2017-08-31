@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-doc
+Create doc tree follows
+:ref:`Sanhe Sphinx standard <Sanhe_sphinx_doc_project_style_guide>`.
 """
 
 from __future__ import print_function
@@ -20,8 +21,9 @@ except:
 
 
 class Article(object):
-    """
+    """Represent a .rst file with Title.
 
+    :param title: The title line above '=========='
     :param path: xxx/index.rst
 
     **中文文档**
@@ -46,17 +48,19 @@ class DocTree(object):
     def __init__(self, dir_path, content_file="_content.rst"):
         self.content_file = content_file
         if self.is_doc_dir(dir_path) is False:
-            raise Exception("'%s' is not a valid source doc directory!" % dir_path)
+            raise Exception(
+                "'%s' is not a valid source doc directory!" % dir_path)
         self.dir_path = dir_path
 
     def is_doc_dir(self, dir_path):
-        """
+        """Test if directory contains a ``_content.rst`` file.
 
         **中文文档**
 
-        检测该目录是否符合 :ref:`Sanhe Sphinx 文档标准 <Sanhe_sphinx_doc_project_style_guide>`:
+        检测该目录是否符合
+        :ref:`Sanhe Sphinx 文档标准 <Sanhe_sphinx_doc_project_style_guide>`:
 
-        - 文件目录下是否有一个 ``content.rst`` 文件。
+        - 文件目录下是否有一个 ``_content.rst`` 文件。
         """
         if os.path.exists(join(dir_path, self.content_file)):
             return True
@@ -64,7 +68,7 @@ class DocTree(object):
             return False
 
     def get_doc_dir_list(self, dir_path):
-        """
+        """Get all sub document dir under a directory.
 
         **中文文档**
 
@@ -80,7 +84,7 @@ class DocTree(object):
 
     @staticmethod
     def get_title(abspath):
-        """
+        """Get title line from .rst file.
 
         **中文文档**
 
@@ -106,7 +110,7 @@ class DocTree(object):
         return None
 
     def process(self, dir_path, table_of_content_header):
-        """
+        """Create ``index.rst`` file based on ``_content.rst`` file for a folder.
 
         **中文文档**
 
