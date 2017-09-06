@@ -13,7 +13,7 @@ try:
     from .util import make_dir, make_file
     from .template import TC
     from .pkg.picage import Package, Module
-except:
+except:  # pragma: no cover
     from docfly.util import make_dir, make_file
     from docfly.template import TC
     from docfly.pkg.picage import Package, Module
@@ -126,39 +126,19 @@ class ApiReferenceDoc(object):
 
         # create .rst files
         for pkg, parent, sub_packages, sub_modules in self.package.walk():
-
             if not is_ignored(pkg, self.ignored_package):
                 dir_path = Path(*([dst, ] + pkg.fullname.split(".")))
                 init_path = Path(dir_path, "__init__.rst")
 
-                self.make_dir(dir_path.abspath)
-                self.make_file(
-                    init_path.abspath, self.generate_package_content(pkg))
+                make_dir(dir_path.abspath)
+                make_file(init_path.abspath,
+                          self.generate_package_content(pkg))
 
                 for mod in sub_modules:
                     if not is_ignored(mod, self.ignored_package):
                         module_path = Path(dir_path, mod.shortname + ".rst")
-                        self.make_file(
+                        make_file(
                             module_path.abspath, self.generate_module_content(mod))
-
-    def make_dir(self, abspath):
-        """Make an empty directory.
-        """
-        try:
-            os.mkdir(abspath)
-            print("Made: %s" % abspath)
-        except:
-            pass
-
-    def make_file(self, abspath, text):
-        """Make a file with utf-8 text.
-        """
-        try:
-            with open(abspath, "wb") as f:
-                f.write(text.encode("utf-8"))
-            print("Made: %s" % abspath)
-        except:
-            pass
 
     def generate_package_content(self, package):
         """Generate package.rst text content.

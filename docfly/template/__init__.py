@@ -5,7 +5,7 @@ import os
 import jinja2
 try:
     from ..pkg import textfile
-except:
+except:  # pragma: no cover
     from docfly.pkg import textfile
 
 

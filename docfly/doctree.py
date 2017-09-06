@@ -14,7 +14,7 @@ try:
     from .util import make_dir, make_file
     from .template import TC
     from .pkg import textfile
-except:
+except:  # pragma: no cover
     from docfly.util import make_dir, make_file
     from docfly.template import TC
     from docfly.pkg import textfile
@@ -109,7 +109,7 @@ class DocTree(object):
 
         return None
 
-    def process(self, dir_path, table_of_content_header):
+    def process_one_dir(self, dir_path, table_of_content_header):
         """Create ``index.rst`` file based on ``_content.rst`` file for a folder.
 
         **中文文档**
@@ -128,14 +128,16 @@ class DocTree(object):
         # read content from content.rst
         content = textfile.read(join(dir_path, self.content_file))
 
-        # replace ``.. articles::`` directives
-        content = content.replace(
-            ".. articles::",
-            TC.toc.render(
+        if len(article_list):
+            articles_markup_content = TC.toc.render(
                 header=table_of_content_header,
                 article_list=article_list,
-            ),
-        )
+            )
+        else:
+            articles_markup_content = ""
+
+        # replace ``.. articles::`` directives
+        content = content.replace(".. articles::", articles_markup_content)
 
         # write to index.rst
         make_file(join(dir_path, "index.rst"), content)
@@ -143,4 +145,4 @@ class DocTree(object):
     def fly(self, table_of_content_header="Table of Content"):
         for current_dir, dir_list, file_list in os.walk(self.dir_path):
             if self.is_doc_dir(current_dir):
-                self.process(current_dir, table_of_content_header)
+                self.process_one_dir(current_dir, table_of_content_header)

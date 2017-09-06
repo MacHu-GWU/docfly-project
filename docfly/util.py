@@ -11,7 +11,7 @@ def make_dir(abspath):
     try:
         os.mkdir(abspath)
         print("Made: %s" % abspath)
-    except:
+    except:  # pragma: no cover
         pass
 
 
@@ -22,5 +22,5 @@ def make_file(abspath, text):
         with open(abspath, "wb") as f:
             f.write(text.encode("utf-8"))
         print("Made: %s" % abspath)
-    except:
+    except:  # pragma: no cover
         pass
