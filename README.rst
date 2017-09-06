@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/MacHu-GWU/docfly-project.svg?branch=master
     :target: https://travis-ci.org/MacHu-GWU/docfly-project?branch=master
 
+.. image:: https://coveralls.io/repos/github/MacHu-GWU/docfly-project/badge.svg?branch=master
+    :target: https://coveralls.io/github/MacHu-GWU/docfly-project?branch=master
+
 .. image:: https://img.shields.io/pypi/v/docfly.svg
     :target: https://pypi.python.org/pypi/docfly
 
