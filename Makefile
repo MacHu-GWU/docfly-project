@@ -258,4 +258,4 @@ publish: ## Publish This Library to PyPI
 	${BIN_PIP} install 'twine>=1.5.0'
 	${BIN_PYTHON} setup.py sdist bdist_wheel
 	${BIN_TWINE} upload dist/*
-	-rm -r build dist .egg ${PACKAGE_NAME}.egg-info
+	-rm -rf build dist .egg ${PACKAGE_NAME}.egg-info
