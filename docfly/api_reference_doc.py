@@ -112,7 +112,7 @@ class ApiReferenceDoc(object):
 
         try:
             os.mkdir(dst)
-        except:
+        except:  # pragma: no cover
             pass
 
         package_dir = Path(dst, self.package.shortname)
@@ -165,7 +165,7 @@ class ApiReferenceDoc(object):
         """
         if isinstance(package, Package):
             return package.render(ignored_package=self.ignored_package)
-        else:
+        else:  # pragma: no cover
             raise Exception("%r is not a Package object" % package)
 
     def generate_module_content(self, module):
@@ -181,47 +181,5 @@ class ApiReferenceDoc(object):
         """
         if isinstance(module, Module):
             return module.render()
-        else:
+        else:  # pragma: no cover
             raise Exception("%r is not a Module object" % module)
-
-
-if __name__ == "__main__":
-    def test_is_ignored():
-        ignored_package = [
-            "toppackage.subpackage1",
-            "toppackage.subpackage2.module22.py",
-            "toppackage.module2.py",
-        ]
-        assert is_ignored(
-            Package("toppackage"), ignored_package) is False
-        assert is_ignored(
-            Package("toppackage.subpackage1"), ignored_package) is True
-        assert is_ignored(
-            Module("toppackage.subpackage1.module11"), ignored_package) is True
-        assert is_ignored(
-            Module("toppackage.subpackage1.module12"), ignored_package) is True
-
-        assert is_ignored(
-            Package("toppackage.subpackage2"), ignored_package) is False
-        assert is_ignored(
-            Module("toppackage.subpackage2.module21"), ignored_package) is False
-        assert is_ignored(
-            Module("toppackage.subpackage2.module22"), ignored_package) is True
-
-        assert is_ignored(
-            Module("toppackage.module1"), ignored_package) is False
-        assert is_ignored(
-            Module("toppackage.module2"), ignored_package) is True
-
-    test_is_ignored()
-
-    doc = ApiReferenceDoc(
-        "toppackage",
-        dst="_source",
-        ignored_package=[
-            "toppackage.subpackage1",
-            "toppackage.subpackage2.module22.py",
-            "toppackage.module2.py",
-        ],
-    )
-    doc.fly()
