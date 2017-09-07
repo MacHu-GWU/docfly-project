@@ -10,10 +10,10 @@ from collections import OrderedDict
 
 try:
     from pathlib_mate.pathlib import Path
-except:  # pragma: no cover
+except: # pragma: no cover
     pass
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __short_description__ = "Object style interface for package/module."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
@@ -34,7 +34,7 @@ def get_sp_dir():  # pragma: no cover
     system_name = platform.system()
     if system_name == "Windows":
         site_packages_path = os.path.join(
-            os.path.dirname(sys.executable),
+            os.path.dirname(os.path.dirname(sys.executable)),
             "Lib",
             "site-packages",
         )
@@ -225,7 +225,7 @@ class Package(BaseModuleOrPackage):
         return s
 
     def __repr__(self):
-        return "Package(name=%r}" % self.name
+        return "Package(name=%r, path='%s')" % (self.name, self.path)
 
     def __getitem__(self, name):
         if "." in name:

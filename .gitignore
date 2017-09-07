@@ -1,5 +1,7 @@
 # User Settings
-docfly.egg-info
+docfly_venv/
+docfly.egg-info/
+docfly-*/
 index.rst
 
 # Byte-compiled / optimized / DLL files
