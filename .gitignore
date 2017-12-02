@@ -2,7 +2,7 @@
 docfly_venv/
 docfly.egg-info/
 docfly-*/
-index.rst
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
