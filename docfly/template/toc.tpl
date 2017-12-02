@@ -1,5 +1,5 @@
 {{ header }}
-{{ "-" * header|length }}
+{{ "-" * header_line_length }}
 
 .. toctree::
    :maxdepth: 1

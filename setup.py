@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+The setup script is the centre of all activity in building, distributing,
+and installing modules using the Distutils. It is required for ``pip install``.
+
+See more: https://docs.python.org/2/distutils/setupscript.html
+"""
+
 from __future__ import print_function
 import os
 from datetime import date
@@ -83,11 +90,13 @@ if __name__ == "__main__":
 
     # Project Url
     URL = "https://github.com/{0}/{1}".format(GITHUB_USERNAME, repository_name)
+
     # Use todays date as GitHub release tag
     github_release_tag = str(date.today())
+
     # Source code download url
-    DOWNLOAD_URL = "https://github.com/{0}/{1}/tarball/{2}".format(
-        GITHUB_USERNAME, repository_name, github_release_tag)
+    DOWNLOAD_URL = "https://pypi.python.org/pypi/{0}/{1}#downloads".format(
+        PKG_NAME, VERSION)
 
     try:
         LICENSE = package.__license__
@@ -115,6 +124,9 @@ if __name__ == "__main__":
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
     ]
+    """
+    Full list can be found at: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    """
 
     # Read requirements.txt, ignore comments
     try:

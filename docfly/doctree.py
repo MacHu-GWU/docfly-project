@@ -109,8 +109,16 @@ class DocTree(object):
 
         return None
 
-    def process_one_dir(self, dir_path, table_of_content_header):
-        """Create ``index.rst`` file based on ``_content.rst`` file for a folder.
+    def process_one_dir(self,
+                        dir_path,
+                        table_of_content_header,
+                        header_line_length=None):
+        """
+        Create ``index.rst`` file based on ``_content.rst`` file for a folder.
+
+        :param dir_path:
+        :param table_of_content_header:
+        :param header_line_length: ``----------`` header line length.
 
         **中文文档**
 
@@ -128,9 +136,16 @@ class DocTree(object):
         # read content from content.rst
         content = textfile.read(join(dir_path, self.content_file))
 
+        if header_line_length is None:
+            header_line_length = 78
+
+        if header_line_length < len(table_of_content_header):
+            header_line_length = len(table_of_content_header)
+
         if len(article_list):
             articles_markup_content = TC.toc.render(
                 header=table_of_content_header,
+                header_line_length=header_line_length,
                 article_list=article_list,
             )
         else:
