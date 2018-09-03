@@ -10,7 +10,7 @@ from collections import OrderedDict
 
 try:
     from pathlib_mate.pathlib import Path
-except: # pragma: no cover
+except:  # pragma: no cover
     pass
 
 __version__ = "0.0.3"

@@ -80,6 +80,7 @@ class DocTree(object):
             abspath = join(dir_path, path)
             if self.is_doc_dir(abspath):
                 dir_list.append(abspath)
+        dir_list.sort()
         return dir_list
 
     @staticmethod
