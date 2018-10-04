@@ -1,2 +1,2 @@
 jinja2
-pathlib_mate
+pathlib_mate>=0.0.14
