@@ -8,7 +8,7 @@ sub packages and modules
 ------------------------
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
     {% for pkg in package.sub_packages.values() -%}
     {% if not is_ignored(pkg, ignored_package) -%}

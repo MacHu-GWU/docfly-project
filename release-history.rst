@@ -1,7 +1,7 @@
 Release and Version History
 ===========================
 
-0.0.2 (TODO)
+0.0.17 (TODO)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
@@ -12,6 +12,14 @@ Release and Version History
 **Miscellaneous**
 
 
-0.0.1 (2016-01-01)
+0.0.16 (2018-10-16)
+~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- Automatic API Reference Doc Generation.
+- Easy Table of Content directive Generation (``.. toctree::``).
+
+
+0.0.1 (2015-08-13)
 ~~~~~~~~~~~~~~~~~~
 - First release

@@ -9,6 +9,7 @@ from __future__ import print_function
 import os
 import shutil
 from pathlib_mate import Path
+
 try:
     from .util import make_dir, make_file
     from .template import TC
@@ -92,9 +93,9 @@ class ApiReferenceDoc(object):
     ``docfly.zzz_manual_install.py``
     """
 
-    def __init__(self, package_name, dst="_source", ignored_package=None):
+    def __init__(self, conf_file, package_name, ignored_package=None):
+        self.conf_file = conf_file
         self.package = Package(package_name)
-        self.dst = dst
 
         if ignored_package is None:
             ignored_package = list()
@@ -106,18 +107,14 @@ class ApiReferenceDoc(object):
                 self.ignored_package.append(pkg_fullname)
 
     def fly(self):
-        """Generate doc tree.
         """
-        dst = self.dst  # create an temp alias
+        Generate doc tree.
+        """
+        dst_dir = Path(self.conf_file).parent.abspath
 
-        try:
-            os.mkdir(dst)
-        except:  # pragma: no cover
-            pass
+        package_dir = Path(dst_dir, self.package.shortname)
 
-        package_dir = Path(dst, self.package.shortname)
-
-        # delete existsing api document
+        # delete existing api document
         try:
             if package_dir.exists():
                 shutil.rmtree(package_dir.abspath)
@@ -127,18 +124,22 @@ class ApiReferenceDoc(object):
         # create .rst files
         for pkg, parent, sub_packages, sub_modules in self.package.walk():
             if not is_ignored(pkg, self.ignored_package):
-                dir_path = Path(*([dst, ] + pkg.fullname.split(".")))
+                dir_path = Path(*([dst_dir, ] + pkg.fullname.split(".")))
                 init_path = Path(dir_path, "__init__.rst")
 
                 make_dir(dir_path.abspath)
-                make_file(init_path.abspath,
-                          self.generate_package_content(pkg))
+                make_file(
+                    init_path.abspath,
+                    self.generate_package_content(pkg),
+                )
 
                 for mod in sub_modules:
                     if not is_ignored(mod, self.ignored_package):
                         module_path = Path(dir_path, mod.shortname + ".rst")
                         make_file(
-                            module_path.abspath, self.generate_module_content(mod))
+                            module_path.abspath,
+                            self.generate_module_content(mod),
+                        )
 
     def generate_package_content(self, package):
         """Generate package.rst text content.

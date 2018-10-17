@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Auto generated from pygitrepo 0.0.22
+# Auto generated from pygitrepo 0.0.24
 #
 # This Makefile is a dev-ops tool set.
 # Compatible with:
@@ -352,7 +352,6 @@ init_doc: doc_dep ## Initialize Sphinx Documentation Library
 build_doc: doc_dep dev_install ## ** Build Documents, start over
 	-rm -r ${PROJECT_ROOT_DIR}/docs/build
 	-rm -r ${PROJECT_ROOT_DIR}/docs/source/${PACKAGE_NAME}
-	${BIN_PYTHON} ${PROJECT_ROOT_DIR}/docs/create_doctree.py
 	( \
 		source ${BIN_ACTIVATE}; \
 		cd ${PROJECT_ROOT_DIR}/docs; \
@@ -363,7 +362,6 @@ build_doc: doc_dep dev_install ## ** Build Documents, start over
 .PHONY: build_doc_again
 build_doc_again: ## Build Documents, skip re-install, skip cleanup-old-doc
 	-rm -r ${PROJECT_ROOT_DIR}/docs/source/${PACKAGE_NAME}
-	${BIN_PYTHON} ${PROJECT_ROOT_DIR}/docs/create_doctree.py
 	( \
 		source ${BIN_ACTIVATE}; \
 		cd ${PROJECT_ROOT_DIR}/docs; \

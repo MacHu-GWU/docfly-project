@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+utilities.
+"""
+
 from __future__ import print_function, unicode_literals
 import os
 
 
 def make_dir(abspath):
-    """Make an empty directory.
+    """
+    Make an empty directory.
     """
     try:
         os.mkdir(abspath)
@@ -16,7 +21,8 @@ def make_dir(abspath):
 
 
 def make_file(abspath, text):
-    """Make a file with utf-8 text.
+    """
+    Make a file with utf-8 text.
     """
     try:
         with open(abspath, "wb") as f:

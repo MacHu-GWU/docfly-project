@@ -1,4 +1,3 @@
-
 .. image:: https://readthedocs.org/projects/docfly/badge/?version=latest
     :target: https://docfly.readthedocs.io/?badge=latest
     :alt: Documentation Status
@@ -52,6 +51,11 @@
 Welcome to ``docfly`` Documentation
 ==============================================================================
 ``docfly`` is a utility tools to minimize your work using `sphinx-doc <http://www.sphinx-doc.org/en/stable/index.html>`_
+
+**Feature**:
+
+- Automatic API Reference Doc Generation.
+- Easy Table of Content directive Generation (``.. toctree::``).
 
 
 .. _install:

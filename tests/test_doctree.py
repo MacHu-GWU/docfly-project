@@ -4,43 +4,30 @@
 from __future__ import unicode_literals
 import pytest
 import docfly
-from pathlib_mate import Path
+from docfly.doctree import ArticleFolder
+from pathlib_mate import PathCls as Path
+
+docs_source_dir = Path(__file__).change(new_basename="test_source")
 
 
-def setup_module(module):
-    """ setup any state specific to the execution of the given module."""
-    with open("a.rst", "wb") as f:
-        content = "Header\n=========="
-        f.write(content.encode("utf-8"))
+class TestArticleFolder(object):
+    def test_title(self):
+        af = ArticleFolder(dir_path=docs_source_dir.abspath)
+        assert af.title == "Welcome to the Document"
 
-    with open("b.rst", "wb") as f:
-        content = "Header\n----------"
-        f.write(content.encode("utf-8"))
+        af = ArticleFolder(dir_path=docs_source_dir.append_parts("Section1").abspath)
+        assert af.title == "Section1"
 
+    def test_sub_article_folders(self):
+        af = ArticleFolder(dir_path=docs_source_dir.abspath)
+        assert len(af.sub_article_folders) == 3
+        for ind, sub_af in enumerate(af.sub_article_folders):
+            assert sub_af.title == "Section{}".format(ind + 1)
 
-def teardown_module(module):
-    """ teardown any state that was previously setup with a setup_module
-    method.
-    """
-    import os
-    for file in ["a.rst", "b.rst"]:
-        try:
-            os.remove(file)
-        except:
-            pass
-
-
-def test():
-    source_dir = Path(__file__).absolute().\
-        parent.parent.\
-        append_parts("docs", "source").abspath
-    doc = docfly.DocTree(source_dir)
-    doc.fly(table_of_content_header="Table of Content")
-
-
-def test_get_title():
-    assert docfly.DocTree.get_title("a.rst") == "Header"
-    assert docfly.DocTree.get_title("b.rst") == "Header"
+    def test_toc_directive(self):
+        af = ArticleFolder(dir_path=docs_source_dir.abspath)
+        rst_directive = af.toc_directive()
+        print(rst_directive)
 
 
 if __name__ == "__main__":

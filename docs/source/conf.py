@@ -88,7 +88,6 @@ pygments_style = 'sphinx'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -106,8 +105,8 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_logo = "docfly-logo.png"
-html_favicon = "docfly-favicon.ico"
+html_logo = "./_static/docfly-logo.png"
+html_favicon = "./_static/docfly-favicon.ico"
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -124,12 +123,10 @@ html_sidebars = {
     ]
 }
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'docflydoc'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -159,7 +156,6 @@ latex_documents = [
      u'Sanhe Hu', 'manual'),
 ]
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
@@ -168,7 +164,6 @@ man_pages = [
     (master_doc, 'docfly', 'docfly Documentation',
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -181,8 +176,38 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
 autodoc_member_order = 'bysource'
+
+# --- Api Reference Doc ---
+from docfly import DocTree
+
+package_name = docfly.__name__
+docfly.ApiReferenceDoc(
+    conf_file=__file__,
+    package_name=package_name,
+    ignored_package=[
+        "%s.pkg" % package_name,
+    ]
+).fly()
+
+
+def source_read_callback(app, docname, source):
+    """
+    This function will be called every time after Sphinx read a rst file content.
+    """
+    # Make sure we're outputting HTML
+    if app.builder.format != 'html':
+        return
+    src = source[0]
+    src = DocTree.fly(
+        conf_path=__file__, docname=docname, source=src,
+        maxdepth=1,
+    )
+    source[0] = src
+
+
+def setup(app):
+    app.connect("source-read", source_read_callback)

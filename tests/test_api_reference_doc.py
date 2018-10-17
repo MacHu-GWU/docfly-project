@@ -2,21 +2,31 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import shutil
 import docfly
 from pathlib_mate import Path
 
+package_name = docfly.__name__
+
+
+def setup_module(module):
+    try:
+        shutil.rmtree(Path(__file__).change(new_basename=package_name).abspath)
+    except:
+        pass
+
+
+def teardown_module(module):
+    setup_module(module)
+
 
 def test():
-    package_name = docfly.__name__
-    source_dir = Path(__file__).absolute().\
-        parent.parent.\
-        append_parts("docs", "source").abspath
     doc = docfly.ApiReferenceDoc(
-        package_name,
-        dst=source_dir,
+        conf_file=Path(__file__).change(new_basename="conf.py").abspath,
+        package_name=package_name,
         ignored_package=[
             "%s.pkg" % package_name,
-            "%s.zzz_ezinstall.py" % package_name,
+            "zzz_manual_install.py",
         ]
     )
     doc.fly()

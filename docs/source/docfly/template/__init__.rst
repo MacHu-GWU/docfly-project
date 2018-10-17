@@ -8,6 +8,6 @@ sub packages and modules
 ------------------------
 
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: 1
 
     

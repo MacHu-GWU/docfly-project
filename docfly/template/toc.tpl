@@ -1,9 +1,6 @@
-{{ header }}
-{{ "-" * header_line_length }}
-
 .. toctree::
-   :maxdepth: 1
+    :maxdepth: {{ maxdepth }}
 
     {% for article in article_list -%}
-    {{ article.title }} <{{ article.path }}>
+    {{ article.title }} <{{ article.rel_path }}>
     {% endfor -%}
