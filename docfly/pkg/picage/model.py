@@ -37,6 +37,7 @@ class BaseModuleOrPackage(object):
 
             # is single file package
             p = Path(Path(sp_dir, *chain).abspath + ".py")
+            print(1111, p)
             if p.is_file() and p.exists():
                 self.path = p
                 self.is_single_file = True
@@ -44,6 +45,7 @@ class BaseModuleOrPackage(object):
 
             # then has to be a directory having __init__.py file
             p = Path(sp_dir, *chain)
+            print(1111, p)
             if p.is_dir() and p.exists() and Path(p, "__init__.py").exists():
                 self.path = Path(sp_dir, *chain)
                 self.is_single_file = False
