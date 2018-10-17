@@ -31,6 +31,16 @@ def test():
     )
     doc.fly()
 
+    doc = docfly.ApiReferenceDoc(
+        conf_file=Path(__file__).change(new_basename="conf.py").abspath,
+        package_name="pathlib_mate",
+        ignored_package=[
+            "%s.pkg" % package_name,
+            "zzz_manual_install.py",
+        ]
+    )
+    doc.fly()
+
 
 if __name__ == "__main__":
     import os
