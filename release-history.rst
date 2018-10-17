@@ -5,6 +5,8 @@ Release and Version History
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
+- make docfly a sphinx extensions. (Sorry, now I don't know how yet)
+
 **Minor Improvements**
 
 **Bugfixes**
