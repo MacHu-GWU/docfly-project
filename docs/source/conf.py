@@ -183,8 +183,6 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 autodoc_member_order = 'bysource'
 
 # --- Api Reference Doc ---
-from docfly import DocTree
-
 package_name = docfly.__name__
 docfly.ApiReferenceDoc(
     conf_file=__file__,
