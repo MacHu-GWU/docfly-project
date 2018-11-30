@@ -51,22 +51,12 @@ docfly 是一个帮助你更容易地使用 `sphinx-doc <http://www.sphinx-doc.o
 
 也就是说, 你仍然要手动的指定你要在目录中包括哪些子文档. 当你创建了新的 ``.rst`` 文件时, 你需要手动将其添加到 Directive 中去.
 
-而 docfly 的另一个重要功能就是: 只要你按照 :ref:`Sphinx文档项目规范 <sanhe_sphinx_doc_project_style_guide>`, 那么仅仅使用 ``.. articles::`` 标记, 就能在自动发现其他文档, 并在该处生成目录的索引.
+而 docfly 的另一个重要功能就是: 只要你按照 :ref:`Sphinx文档项目规范 <sanhe_sphinx_doc_project_style_guide>`, 那么仅仅使用 ``.. autotoctree::`` 标记, 就能自动发现当前目录下的子目录中的 ``index.rst`` 文档, 并在该处生成 ``.. toctree::`` 的索引.
 
 你需要在 ``conf.py`` 中添加如下内容::
 
-    import docfly
-
-    def source_read_callback(app, docname, source):
-        if app.builder.format != 'html':
-            return
-        src = source[0]
-        src = DocTree.fly(
-            __file__, docname, src,
-            maxdepth=1,
-        )
-        source[0] = src
-
-
-    def setup(app):
-        app.connect("source-read", source_read_callback)
+    extensions = [
+        ...
+        'docfly.directives',
+        ...
+    ]

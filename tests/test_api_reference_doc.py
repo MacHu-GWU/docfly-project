@@ -10,6 +10,7 @@ package_name = docfly.__name__
 
 
 def setup_module(module):
+    print(Path(__file__).change(new_basename=package_name).abspath)
     try:
         shutil.rmtree(Path(__file__).change(new_basename=package_name).abspath)
     except:
@@ -24,16 +25,6 @@ def test():
     doc = docfly.ApiReferenceDoc(
         conf_file=Path(__file__).change(new_basename="conf.py").abspath,
         package_name=package_name,
-        ignored_package=[
-            "%s.pkg" % package_name,
-            "zzz_manual_install.py",
-        ]
-    )
-    doc.fly()
-
-    doc = docfly.ApiReferenceDoc(
-        conf_file=Path(__file__).change(new_basename="conf.py").abspath,
-        package_name="pathlib_mate",
         ignored_package=[
             "%s.pkg" % package_name,
             "zzz_manual_install.py",

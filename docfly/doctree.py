@@ -7,6 +7,7 @@ Create doc tree if you follows
 """
 
 from __future__ import print_function
+import warnings
 from pathlib_mate import PathCls as Path
 
 try:
@@ -69,7 +70,7 @@ class ArticleFolder(object):
         从一个 ``_filename`` 所指定的 .rst 文件中, 找到顶级标题.
         也就是第一个 ``====`` 或 ``----`` 或 ``~~~~`` 上面一行.
         """
-        header_bar_char_list = "=-~"
+        header_bar_char_list = "=-~+*#^"
 
         cursor_previous_line = None
         for cursor_line in textfile.readlines(self.rst_path, strip="both"):
@@ -132,8 +133,13 @@ class DocTree(object):
 
     The file structure has to follow
     :ref:`Sanhe Sphinx standard <sanhe_sphinx_doc_project_style_guide>`.
+    
+    .. deprecated:: 0.
+    
+        message
+    
+    
     """
-
     @classmethod
     def fly(cls,
             conf_path,
@@ -148,6 +154,10 @@ class DocTree(object):
         :param source: rst content.
         :param maxdepth: int, max toc tree depth.
         """
+        msg = ("``.. articles::`` directive is going to be deprecated. "
+               "use ``.. autodoctree`` instead.")
+        warnings.warn(msg, FutureWarning)
+
         directive_pattern = ".. articles::"
         if directive_pattern not in source:
             return source

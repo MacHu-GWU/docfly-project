@@ -1,7 +1,7 @@
 Release and Version History
 ===========================
 
-0.0.17 (TODO)
+0.0.18 (TODO)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
@@ -12,6 +12,16 @@ Release and Version History
 **Bugfixes**
 
 **Miscellaneous**
+
+
+0.0.17 (2018-11-30)
+~~~~~~~~~~~~~~~~~~
+**Now I finally know how to write sphinx extension correctly!**
+
+**Features and Improvements**
+
+- now docfly can be used as a sphinx extensions.
+- ``.. articles::`` can be replaced by ``.. autotoctree::``
 
 
 0.0.16 (2018-10-16)

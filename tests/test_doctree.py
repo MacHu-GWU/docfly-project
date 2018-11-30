@@ -3,7 +3,6 @@
 
 from __future__ import unicode_literals
 import pytest
-import docfly
 from docfly.doctree import ArticleFolder
 from pathlib_mate import PathCls as Path
 

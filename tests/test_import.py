@@ -6,6 +6,7 @@ import pytest
 
 def test_import():
     import docfly
+    from docfly import directives
 
 
 if __name__ == "__main__":

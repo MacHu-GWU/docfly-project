@@ -6,7 +6,8 @@
 Table of Content
 ------------------------------------------------------------------------------
 
-.. articles::
+.. autotoctree::
+    :maxdepth: 1
 
 .. include:: ../../AUTHORS.rst
 

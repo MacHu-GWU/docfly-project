@@ -3,6 +3,7 @@
 [run]
 omit =
     docfly/pkg/*
+    docfly/directives/*
     docfly/zzz_ezinstall.py
 
 [report]

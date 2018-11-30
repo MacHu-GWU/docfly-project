@@ -42,6 +42,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'docfly.directives',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -192,22 +193,3 @@ docfly.ApiReferenceDoc(
         "%s.pkg" % package_name,
     ]
 ).fly()
-
-
-def source_read_callback(app, docname, source):
-    """
-    This function will be called every time after Sphinx read a rst file content.
-    """
-    # Make sure we're outputting HTML
-    if app.builder.format != 'html':
-        return
-    src = source[0]
-    src = DocTree.fly(
-        conf_path=__file__, docname=docname, source=src,
-        maxdepth=1,
-    )
-    source[0] = src
-
-
-def setup(app):
-    app.connect("source-read", source_read_callback)
