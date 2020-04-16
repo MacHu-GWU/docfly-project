@@ -1,7 +1,7 @@
 Release and Version History
 ===========================
 
-0.0.18 (TODO)
+0.0.19 (TODO)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
@@ -12,6 +12,13 @@ Release and Version History
 **Bugfixes**
 
 **Miscellaneous**
+
+
+0.0.18 (2020-04-15)
+~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- allow ``.. autotoctree::`` to detect header line if it use ``.. include:: other-file.rst`` at the top, then it exam after the ``other-file.rst`` merged into the original rst file.
 
 
 0.0.17 (2018-11-30)
