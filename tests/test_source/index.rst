@@ -1,6 +1,1 @@
-.. _home:
-
-Welcome to the Document
-==============================================================================
-
-Welcome!
+.. include:: ./index-content.rst

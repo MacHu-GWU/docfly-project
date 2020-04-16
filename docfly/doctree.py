@@ -72,8 +72,18 @@ class ArticleFolder(object):
         """
         header_bar_char_list = "=-~+*#^"
 
+        lines = list()
+        for cursor_line in textfile.readlines(self.rst_path, strip="both", encoding="utf-8"):
+            if cursor_line.startswith(".. include::"):
+                relative_path = cursor_line.split("::")[-1].strip()
+                included_path = Path(Path(self.rst_path).parent.abspath, relative_path)
+                if included_path.exists():
+                    cursor_line = included_path.read_text(encoding="utf-8")
+            lines.append(cursor_line)
+        rst_content = "\n".join(lines)
+
         cursor_previous_line = None
-        for cursor_line in textfile.readlines(self.rst_path, strip="both"):
+        for cursor_line in rst_content.split("\n"):
             for header_bar_char in header_bar_char_list:
                 if cursor_line.startswith(header_bar_char):
                     flag_full_bar_char = cursor_line == header_bar_char * len(cursor_line)

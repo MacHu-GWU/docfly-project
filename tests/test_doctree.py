@@ -13,7 +13,6 @@ class TestArticleFolder(object):
     def test_title(self):
         af = ArticleFolder(dir_path=docs_source_dir.abspath)
         assert af.title == "Welcome to the Document"
-
         af = ArticleFolder(dir_path=docs_source_dir.append_parts("Section1").abspath)
         assert af.title == "Section1"
 
