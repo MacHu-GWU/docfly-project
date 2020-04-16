@@ -7,7 +7,7 @@ docfly package.
 
 from __future__ import print_function
 
-__version__ = "0.0.17"
+__version__ = "0.0.18"
 __short_description__ = "A utility tool to help you build better sphinx documents."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
