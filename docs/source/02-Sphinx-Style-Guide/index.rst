@@ -11,40 +11,38 @@ Sphinx Style Guide
 本规范是 ``docfly`` 在多年开发 sphinx-doc 插件, 以及建立 复杂的, 包含源代码 API 文档, 复杂树形结构, 多语言支持 等各种各样的文档项目总结的一套规范. 遵守该规范定义的一些模式可以大量的减少重复工作, 使你专注于文档本身.
 
 
-命名空间
+Naming Convention
 ------------------------------------------------------------------------------
-1. 文件名中不要出现空格.
-2. 使用 ``-`` 连接所有的单词, 而不是 ``_``, 这是因为 ``-`` 在Url中是合法字符, 而 ``_`` 不是.
-3. 标题避免使用形如 ``ThisDocument`` 这样的多个单词不分隔, 因为这样命名可读性较差. 推荐使用而用首字母大写的方式..
-4. 尽量使用全英文数字, 不要使用非英语字符, 但如果你必须要这么做, 也并没有问题.
+1. Don't use " " (space) in file name or directory name
+2. Use ``-`` as much as possible. Because ``-`` is a valid character in URL, but ``_`` is not.
+3. Don't use Camel Case because it is not Python style.
+4. Use english character and digits, try to avoid using non ascii characters.
 
 
-.. _cn_sphinx_doc_style_guide_page:
+.. _en_sphinx_doc_style_guide_page:
 
-页面
+Page
 ------------------------------------------------------------------------------
-每一个 ``.rst`` 文件在文档网站中代表的是一个页面. 笔者推荐, 为你的每一个页面的文档文件, 创建一个 **独立的目录**. 其中包含 ``index.rst``. 假设你本来想创建一个文件叫 ``learn-sphinx-doc.rst``, 你应该这样做::
+Each ``.rst`` file represent a html page in your document website. I recommend using a folder instead of a file for each page. For example, suppose you want to create a ``learn-sphinx-doc.rst`` file, you should do this::
 
     source
     |--- learn-sphinx-doc # this is a directory
-        |--- index.rst
+        |--- index.rst # this is the equivalent of learn-sphinx-doc.rst
     |--- index.rst # root
 
-而不是::
+and NOT do this::
 
     source
     |--- learn-sphinx-doc.rst
     |--- index.rst # root
 
-这是因为, **你的文件中很可能包含有多个图片, 而你需要在你的文件中引用它们**. 为每一个页面创建一个文件夹能够让你每个文件所引用的图片与其他文件的图片分开, 不至于混淆.
 
-
-图片
+Image
 ------------------------------------------------------------------------------
 
-如果你使用 :ref:`cn_sphinx_doc_style_guide_page` 一节中的规范, 那么每一个 ``.rst`` 文件中所要引用的图片就应该跟 ``index.rst`` 保持在同一个目录下. 如果你没有使用前面所说的规范, 那么建议你创建一个和你的 ``document-title.rst`` 文件同名的文件夹, 并加上 ``images`` 前缀, 例如 ``images-document-title``, 然后将图片放在这一目录内.
+If you follow the style defined in :ref:`en_sphinx_doc_style_guide_page`, Then you should put images related to a ``index.rst`` file in the same folder.
 
-例如你有一个文档 example, 里面有多个图片 ``chart1.png``, ``chart2.png``. 你的文件目录看起来应该是这样::
+Let's say you have a document ``example/index.rst``, there are lots of images ``chart1.png``, ``chart2.png``. Your file structure should look like this::
 
     example
     |--- images
@@ -52,29 +50,35 @@ Sphinx Style Guide
         |--- chart2.png
     |--- index.rst
 
-这样做有以下几点好处:
+Advantages:
 
-1. 你展开 example 文件时, 要被引用的图片和文档本身分开, 清晰明了. 免除了在图片很多时找不到文档本身的麻烦. 同时也能用关键字 ``images`` 来定位图片目录.
-2. 在文档中引用图片用的是 ``.. image:: ./images/chart1.png`` 这样的相对路径. 有清晰的模式能快速区分跟本文档密切相关的图片, 和其他文档中的图片.
+1. images are isolated from the main document.
+2. in your rst code, you use this relative syntax to include a image ``.. image:: ./images/chart1.png``. It helps you to locate those images belongs to this specific ``index.rst`` file.
 
 
-多语言支持
+Multi Language Support
 ------------------------------------------------------------------------------
 
-如果你想要你的每一篇文档 (每一个 html 页面) 都支持多语言, sphinx 官方的方法很复杂. 有以下两种, 都不太推荐:
+If you want every html page to support multi language, the official method is very complicate. The official methods are (NOT RECOMMENDED):
 
-1. 用 gentext 来为你的文档自动生成目标语言的翻译, 翻译质量很差.
-2. 用 readthedocs 中的多文档功能, 为你的文档维护多个 repo, 维护成本非常高.
+1. use ``gentext`` plugin to translate the doc to target language, very poor translation quality.
+2. use the multi lang feature in ``readthedocs.org``, but you need to maintain multi git repo, it is very hard to keep them up-to-date.
 
-我建议在遵守 :ref:`cn_sphinx_doc_style_guide_page` 中的规范的同时, 用 ``_es.rst``, ``_cn.rst`` 这样的后缀标识同一份文档的不同语言, 就像这样::
+I recommend to follow the style defined in :ref:`en_sphinx_doc_style_guide_page`, and use ``_es.rst``, ``_cn.rst`` surfix to indicate the different lang version for the same document. It looks like this in your file system::
 
     tutorial
     |--- index.rst # english (default)
     |--- index_es.rst # spanish (default)
     |--- index_cn.rst # chinese (default)
 
-然后在每篇文档的顶部使用形如 ``.. _en_tutorial:``, ``.. _es_tutorial:``, ``.. _cn_tutorial:`` 来为每篇文档做索引 (ref). 然后再在每篇文档的一级 header 后面添加如下链接, 允许用户在不同语言版本之间切换::
+Then you can use the reference link, such as ``.. _en_tutorial:``, ``.. _es_tutorial:``, ``.. _cn_tutorial:`` at the begin of your each ``.rst`` file. Then put this rst snippet right under your top header. It serves as a nagivator allow user to switch language::
 
     - :ref:`English <en_tutorial>`
     - :ref:`española <es_tutorial>`
     - :ref:`中文 <cn_tutorial>`
+
+ When you need ``.. autotoctree::`` for non-default (english) sub documents, you can use this option ``:index_file: index_cn.rst`` to locate sub documents that is in specific language::
+
+    .. autotoctree::
+        :maxdepth: 1
+        :index_file: index_es.rst

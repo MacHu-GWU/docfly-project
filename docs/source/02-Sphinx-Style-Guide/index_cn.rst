@@ -27,7 +27,7 @@ Sphinx 文档项目规范
 
     source
     |--- learn-sphinx-doc # this is a directory
-        |--- index.rst
+        |--- index.rst # this is the equivalent of learn-sphinx-doc.rst
     |--- index.rst # root
 
 而不是::
@@ -44,7 +44,7 @@ Sphinx 文档项目规范
 
 如果你使用 :ref:`cn_sphinx_doc_style_guide_page` 一节中的规范, 那么每一个 ``.rst`` 文件中所要引用的图片就应该跟 ``index.rst`` 保持在同一个目录下. 如果你没有使用前面所说的规范, 那么建议你创建一个和你的 ``document-title.rst`` 文件同名的文件夹, 并加上 ``images`` 前缀, 例如 ``images-document-title``, 然后将图片放在这一目录内.
 
-例如你有一个文档 example, 里面有多个图片 ``chart1.png``, ``chart2.png``. 你的文件目录看起来应该是这样::
+例如你有一个文档 ``example/index.rst``, 里面有多个图片 ``chart1.png``, ``chart2.png``. 你的文件目录看起来应该是这样::
 
     example
     |--- images
@@ -63,8 +63,8 @@ Sphinx 文档项目规范
 
 如果你想要你的每一篇文档 (每一个 html 页面) 都支持多语言, sphinx 官方的方法很复杂. 有以下两种, 都不太推荐:
 
-1. 用 gentext 来为你的文档自动生成目标语言的翻译, 翻译质量很差.
-2. 用 readthedocs 中的多文档功能, 为你的文档维护多个 repo, 维护成本非常高.
+1. 用 ``gentext`` 来为你的文档自动生成目标语言的翻译, 翻译质量很差.
+2. 用 readthedocs.org 中的多文档功能, 为你的文档维护多个 repo, 维护成本非常高.
 
 我建议在遵守 :ref:`cn_sphinx_doc_style_guide_page` 中的规范的同时, 用 ``_es.rst``, ``_cn.rst`` 这样的后缀标识同一份文档的不同语言, 就像这样::
 
@@ -78,3 +78,9 @@ Sphinx 文档项目规范
     - :ref:`English <en_tutorial>`
     - :ref:`española <es_tutorial>`
     - :ref:`中文 <cn_tutorial>`
+
+当你要使用 ``.. autotoctree::`` 时, 你可以用 ``:index_file: index_cn.rst`` 来只定位同属于一种语言的子文档. 就像这样::
+
+    .. autotoctree::
+        :maxdepth: 1
+        :index_file: index_cn.rst
