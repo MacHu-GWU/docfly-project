@@ -50,6 +50,13 @@
 
 Welcome to ``docfly`` Documentation
 ==============================================================================
+
+.. contents::
+    :class: this-will-duplicate-information-and-it-is-still-useful-here
+    :depth: 1
+    :local:
+
+
 ``docfly`` is a utility tools to minimize your work using `sphinx-doc <http://www.sphinx-doc.org/en/stable/index.html>`_
 
 Full document can be cond `HERE <https://docfly.readthedocs.io/>`_

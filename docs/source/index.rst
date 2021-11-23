@@ -3,10 +3,7 @@
 - :ref:`English <en_index>`
 - :ref:`中文 <cn_index>`
 
-.. contents::
-    :class: this-will-duplicate-information-and-it-is-still-useful-here
-    :depth: 1
-    :local:
+Release v\ |release| (:ref:`What's new? <release_history>`).
 
 .. include:: ../../README.rst
 
