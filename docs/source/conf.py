@@ -87,7 +87,7 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'monokai'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
@@ -100,7 +100,7 @@ todo_include_todos = True
 html_theme = 'furo'
 html_theme_options = {
     "sidebar_hide_name": False,
-    "dark_logo": "pgr-logo.png",
+    "dark_logo": "docfly-logo.png",
 }
 pygments_dark_style = "monokai"
 
