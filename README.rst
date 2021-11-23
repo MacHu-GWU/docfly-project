@@ -1,12 +1,12 @@
-.. image:: https://readthedocs.org/projects/docfly/badge/?version=latest
-    :target: https://docfly.readthedocs.io/?badge=latest
-    :alt: Documentation Status
-
-.. image:: https://travis-ci.org/MacHu-GWU/docfly-project.svg?branch=master
-    :target: https://travis-ci.org/MacHu-GWU/docfly-project?branch=master
+.. image:: https://github.com/MacHu-GWU/docfly-project/workflows/CI/badge.svg
+    :target: https://github.com/MacHu-GWU/docfly-project/actions?query=workflow:CI
 
 .. image:: https://codecov.io/gh/MacHu-GWU/docfly-project/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/MacHu-GWU/docfly-project
+
+.. image:: https://readthedocs.org/projects/docfly/badge/?version=latest
+    :target: https://docfly.readthedocs.io/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://img.shields.io/pypi/v/docfly.svg
     :target: https://pypi.python.org/pypi/docfly

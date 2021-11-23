@@ -27,7 +27,6 @@ class ArticleFolder(object):
     """
 
     def __init__(self, index_file="index.rst", dir_path=None):
-        print("========= article folder ========")
         self.index_file = index_file
         self.dir_path = dir_path
         self._title = None
