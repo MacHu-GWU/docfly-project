@@ -1,11 +1,9 @@
 Release and Version History
 ===========================
 
-0.0.20 (TODO)
+1.0.2 (TODO)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
-
-- make docfly a sphinx extensions. (Sorry, now I don't know how yet)
 
 **Minor Improvements**
 
@@ -14,17 +12,21 @@ Release and Version History
 **Miscellaneous**
 
 
-0.0.19 (TODO)
+1.0.1 (2021-11-23)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
-- make docfly a sphinx extensions. (Sorry, now I don't know how yet)
+- add directive option: ``:index_file: index.rst`` for ``.. autotoctree::``. Allow generate toctree other than ``index.rst``
+- add multi language best practice guide
 
 **Minor Improvements**
 
-**Bugfixes**
+- migrate CI from travis.ci to Github CI
+- change docfly doc theme to furo
 
 **Miscellaneous**
+
+- start using trunkbase git workflow
 
 
 0.0.18 (2020-04-15)
