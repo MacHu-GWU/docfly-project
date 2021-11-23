@@ -4,7 +4,6 @@
 omit =
     docfly/pkg/*
     docfly/directives/*
-    docfly/zzz_ezinstall.py
 
 [report]
 # Regexes for lines to exclude from consideration
