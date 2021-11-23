@@ -67,10 +67,10 @@ Install
 
 .. code-block:: console
 
-	$ pip install docfly
+    $ pip install docfly
 
 To upgrade to latest version:
 
 .. code-block:: console
 
-	$ pip install --upgrade docfly
+    $ pip install --upgrade docfly

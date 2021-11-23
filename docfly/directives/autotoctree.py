@@ -17,7 +17,7 @@ from ..doctree import ArticleFolder
 
 class AutoTocTree(Directive):
     """
-    Automatically includes index.rst in toctree from::
+    Automatically includes ``index.rst`` in toctree from::
 
         <current_dir>/<any-folder>/index.rst
 
@@ -35,16 +35,21 @@ class AutoTocTree(Directive):
             ./section2/index.rst
             ...
     """
+    _opt_append_ahead = "append_ahead"
+    _opt_index_file = "index_file"
+    _opt_index_file_default = "index.rst"
+
     has_content = True
     option_spec = TocTree.option_spec.copy()
-    option_spec["append_ahead"] = directives.flag
+    option_spec[_opt_append_ahead] = directives.flag
+    option_spec[_opt_index_file] = str
 
     def run(self):
         node = nodes.Element()
         node.document = self.state.document
         current_file = self.state.document.current_source
         output_rst = self.derive_toctree_rst(current_file)
-        view_list = StringList(output_rst.splitlines(), source='')
+        view_list = StringList(output_rst.splitlines(), source="")
         sphinx.util.nested_parse_with_titles(self.state, view_list, node)
         return node.children
 
@@ -63,25 +68,38 @@ class AutoTocTree(Directive):
         """
         TAB = " " * 4
         lines = list()
+
+        # create the .. toctree:: and its options
         lines.append(".. toctree::")
         for opt in TocTree.option_spec:
             value = self.options.get(opt)
             if value is not None:
-                lines.append(("{}:{}: {}".format(TAB, opt, value)).rstrip())
+                line = "{indent}:{option}: {value}".format(
+                    indent=TAB,
+                    option=opt,
+                    value=value,
+                ).rstrip()
+                lines.append(line)
         lines.append("")
 
-        append_ahead = "append_ahead" in self.options
-        if append_ahead:
+        if self._opt_append_ahead in self.options:
             for line in list(self.content):
                 lines.append(TAB + line)
+        index_file = self.options.get(self._opt_index_file, self._opt_index_file_default)
 
-        article_folder = ArticleFolder(dir_path=Path(current_file).parent.abspath)
+        article_folder = ArticleFolder(
+            index_file=index_file,
+            dir_path=Path(current_file).parent.abspath,
+        )
         for af in article_folder.sub_article_folders:
-            line = "{}{} <{}>".format(TAB, af.title, af.rel_path)
+            line = "{indent}{title} <{relpath}>".format(
+                indent=TAB,
+                title=af.title,
+                relpath=af.rel_path,
+            )
             lines.append(line)
 
-        append_behind = not append_ahead
-        if append_behind:
+        if self._opt_append_ahead not in self.options:
             for line in list(self.content):
                 lines.append(TAB + line)
 

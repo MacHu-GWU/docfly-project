@@ -1,36 +1,40 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import pytest
 import shutil
 import docfly
+from docfly.api_reference_doc import ApiReferenceDoc
 from pathlib_mate import Path
 
 package_name = docfly.__name__
+DIR_HERE = Path(__file__).parent
 
 
 def setup_module(module):
-    print(Path(__file__).change(new_basename=package_name).abspath)
+    dir_docfly_api_ref_doc = Path(DIR_HERE, package_name).abspath
     try:
-        shutil.rmtree(Path(__file__).change(new_basename=package_name).abspath)
+        shutil.rmtree(dir_docfly_api_ref_doc)
     except:
         pass
 
 
-def teardown_module(module):
-    setup_module(module)
+class TestApiReferenceDoc(object):
+    def test(self):
+        doc = ApiReferenceDoc(
+            conf_file=Path(__file__).change(new_basename="conf.py").abspath,
+            package_name=package_name,
+            ignored_package=[
+                "{}.pkg".format(package_name),
+                "{}.util.py".format(package_name),
+            ]
+        )
+        doc.fly()
 
+        assert Path(DIR_HERE, package_name, "api_reference_doc.rst").exists()
+        assert Path(DIR_HERE, package_name, "doctree.rst").exists()
 
-def test():
-    doc = docfly.ApiReferenceDoc(
-        conf_file=Path(__file__).change(new_basename="conf.py").abspath,
-        package_name=package_name,
-        ignored_package=[
-            "%s.pkg" % package_name,
-            "zzz_manual_install.py",
-        ]
-    )
-    doc.fly()
+        assert not Path(DIR_HERE, package_name, "pkg").exists()
+        assert not Path(DIR_HERE, package_name, "util").exists()
 
 
 if __name__ == "__main__":

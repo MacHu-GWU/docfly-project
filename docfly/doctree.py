@@ -1,23 +1,16 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
 Create doc tree if you follows
-:ref:`Sanhe Sphinx standard <sanhe_sphinx_doc_project_style_guide>`.
+
+:ref:`Sanhe Sphinx standard <en_sphinx_doc_style_guide>`.
 """
 
 from __future__ import print_function
-import warnings
 from pathlib_mate import PathCls as Path
 
-try:
-    from .util import make_dir, make_file
-    from .template import TC
-    from .pkg import textfile
-except:  # pragma: no cover
-    from docfly.util import make_dir, make_file
-    from docfly.template import TC
-    from docfly.pkg import textfile
+from .template import TC
+from .pkg import textfile
 
 
 class ArticleFolder(object):
@@ -32,9 +25,10 @@ class ArticleFolder(object):
 
     一篇 Article 代表着一个位于文件夹内的 ``index.rst`` 文件. 其中必然有至少一个标题元素.
     """
-    _filename = "index.rst"
 
-    def __init__(self, dir_path=None):
+    def __init__(self, index_file="index.rst", dir_path=None):
+        print("========= article folder ========")
+        self.index_file = index_file
         self.dir_path = dir_path
         self._title = None
 
@@ -43,14 +37,14 @@ class ArticleFolder(object):
         """
         The actual rst file absolute path.
         """
-        return Path(self.dir_path, self._filename).abspath
+        return Path(self.dir_path, self.index_file).abspath
 
     @property
     def rel_path(self):
         """
         File relative path from the folder.
         """
-        return "{}/{}".format(Path(self.dir_path).basename, self._filename)
+        return "{}/{}".format(Path(self.dir_path).basename, self.index_file)
 
     @property
     def title(self):
@@ -90,8 +84,8 @@ class ArticleFolder(object):
                     flag_line_length_greather_than_1 = len(cursor_line) >= 1
                     flag_previous_line_not_empty = bool(cursor_previous_line)
                     if flag_full_bar_char \
-                            and flag_line_length_greather_than_1 \
-                            and flag_previous_line_not_empty:
+                        and flag_line_length_greather_than_1 \
+                        and flag_previous_line_not_empty:
                         return cursor_previous_line.strip()
             cursor_previous_line = cursor_line
 
@@ -106,9 +100,9 @@ class ArticleFolder(object):
         """
         l = list()
         for p in Path.sort_by_fname(
-                Path(self.dir_path).select_dir(recursive=False)
+            Path(self.dir_path).select_dir(recursive=False)
         ):
-            af = ArticleFolder(dir_path=p.abspath)
+            af = ArticleFolder(index_file=self.index_file, dir_path=p.abspath)
             try:
                 if af.title is not None:
                     l.append(af)
@@ -133,55 +127,4 @@ class ArticleFolder(object):
         return articles_directive_content
 
     def __repr__(self):
-        return "Article(title=%r)" % (self.title,)
-
-
-class DocTree(object):
-    """
-    This class is designed for taking a rst file, and find all ``.. articles::``
-    directives, then automatically generate ``.. toctree::`` directive.
-
-    The file structure has to follow
-    :ref:`Sanhe Sphinx standard <sanhe_sphinx_doc_project_style_guide>`.
-    
-    .. deprecated:: 0.
-    
-        message
-    
-    
-    """
-    @classmethod
-    def fly(cls,
-            conf_path,
-            docname,
-            source,
-            maxdepth=1):  # pragma: no cover
-        """
-        Generate toctree directive for rst file.
-
-        :param conf_path: conf.py file absolute path
-        :param docname: the rst file relpath from conf.py directory.
-        :param source: rst content.
-        :param maxdepth: int, max toc tree depth.
-        """
-        msg = ("``.. articles::`` directive is going to be deprecated. "
-               "use ``.. autodoctree`` instead.")
-        warnings.warn(msg, FutureWarning)
-
-        directive_pattern = ".. articles::"
-        if directive_pattern not in source:
-            return source
-
-        af = ArticleFolder(
-            dir_path=Path(Path(conf_path).parent, docname).parent.abspath)
-        toc_directive = af.toc_directive(maxdepth)
-
-        lines = list()
-        for line in source.split("\n"):
-            if directive_pattern in line.strip():
-                if line.strip().startswith(directive_pattern):
-                    line = line.replace(directive_pattern, toc_directive, 1)
-                    lines.append(line)
-                    continue
-            lines.append(line)
-        return "\n".join(lines)
+        return "Article(index_file=%r, title=%r)" % (self.index_file, self.title,)

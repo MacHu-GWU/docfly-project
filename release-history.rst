@@ -1,6 +1,19 @@
 Release and Version History
 ===========================
 
+0.0.20 (TODO)
+~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- make docfly a sphinx extensions. (Sorry, now I don't know how yet)
+
+**Minor Improvements**
+
+**Bugfixes**
+
+**Miscellaneous**
+
+
 0.0.19 (TODO)
 ~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

@@ -21,6 +21,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 from __future__ import unicode_literals
+import os
 from datetime import datetime
 import docfly
 
@@ -42,6 +43,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinx_copybutton',
+    'sphinx_inline_tabs',
     'docfly.directives',
 ]
 
@@ -94,7 +97,12 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'furo'
+html_theme_options = {
+    "sidebar_hide_name": False,
+    "dark_logo": "pgr-logo.png",
+}
+pygments_dark_style = "monokai"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -106,23 +114,14 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_css_files = [
+    'css/custom-style.css',
+]
+html_js_files = [
+    'js/sorttable.js',
+]
 html_logo = "./_static/docfly-logo.png"
 html_favicon = "./_static/docfly-favicon.ico"
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-        'donate.html',
-    ]
-}
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -182,12 +181,26 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 autodoc_member_order = 'bysource'
 
-# --- Api Reference Doc ---
+# Enable custom css
+try:
+    custom_style_file_path = os.path.join(os.path.dirname(__file__), "_static", ".custom-style.rst")
+    with open(custom_style_file_path, "rb") as f:
+        custom_style_file_content = f.read().decode("utf-8")
+    rst_prolog = "\n" + custom_style_file_content + "\n"
+except:
+    pass
+
+# Api Reference Doc
+import docfly
+
 package_name = docfly.__name__
 docfly.ApiReferenceDoc(
     conf_file=__file__,
     package_name=package_name,
     ignored_package=[
+        "%s._version" % package_name,
+        "%s.docs" % package_name,
         "%s.pkg" % package_name,
-    ]
+        "%s.tests" % package_name,
+        ]
 ).fly()

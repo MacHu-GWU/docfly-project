@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -12,10 +11,7 @@ from __future__ import print_function
 import os
 import zlib
 
-try:
-    from .sixmini import integer_types
-except:
-    from docfly.pkg.sixmini import integer_types
+from .sixmini import integer_types
 
 
 def is_gzip_file(abspath):

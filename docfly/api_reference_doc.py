@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -6,33 +5,36 @@ Create api reference doc.
 """
 
 from __future__ import print_function
-import os
+try:
+    import typing
+except:
+    pass
 import shutil
 from pathlib_mate import Path
 
-try:
-    from .util import make_dir, make_file
-    from .template import TC
-    from .pkg.picage import Package, Module
-except:  # pragma: no cover
-    from docfly.util import make_dir, make_file
-    from docfly.template import TC
-    from docfly.pkg.picage import Package, Module
+from .util import make_dir, make_file
+from .template import TC
+from .pkg.picage import Package, Module
 
 
-def module_render(self):
-    return TC.module.render(module=self)
+def render_module(module):
+    """
+    :type module: Module
 
-
-Module.render = module_render
+    :rtype: str
+    """
+    return TC.module.render(module=module)
 
 
 def is_ignored(mod_or_pkg, ignored_package):
-    """Test, if this :class:`docfly.pkg.picage.Module`
+    """
+    Test, if this :class:`docfly.pkg.picage.Module`
     or :class:`docfly.pkg.picage.Package` should be included to generate
     API reference document.
 
     :param mod_or_pkg: module or package
+    :type mod_or_pkg: typing.Union[Module, Package]
+
     :param ignored_package: ignored package
 
     **中文文档**
@@ -53,16 +55,26 @@ def is_ignored(mod_or_pkg, ignored_package):
     return False
 
 
-def package_render(self, ignored_package):
+def render_package(package, ignored_package):
+    """
+    :param package:
+    :type package: Package
+
+    :param ignored_package:
+    :type package: list[str]
+
+    :rtype: str
+    """
     return TC.package.render(
-        package=self, ignored_package=ignored_package, is_ignored=is_ignored)
-
-
-Package.render = package_render
+        package=package,
+        ignored_package=ignored_package,
+        is_ignored=is_ignored,
+    )
 
 
 class ApiReferenceDoc(object):
-    """A class used to generate sphinx-doc api reference part.
+    """
+    A class to generate sphinx-doc api reference part.
 
     Example::
 
@@ -77,14 +89,16 @@ class ApiReferenceDoc(object):
         |--- module1.rst
         |--- module2.rst
 
+    :param conf_file: the conf.py file for sphinx doc. it helps to locate
+        the api reference doc destination directory
+    :type conf_file: string
+
     :param package_name: the importable package name
     :type package_name: string
 
-    :param dst: default "_source", the directory you want to put doc files
-    :type dst: string
-
-    :param ignore: default empty list, package, module prefix you want to ignored
-    :type ignore: list of string
+    :param ignore: default empty list, package, module relative
+        prefix you want to ignored
+    :type ignored_package: list of string
 
     **中文文档**
 
@@ -93,7 +107,12 @@ class ApiReferenceDoc(object):
     ``docfly.zzz_manual_install.py``
     """
 
-    def __init__(self, conf_file, package_name, ignored_package=None):
+    def __init__(
+        self,
+        conf_file,
+        package_name,
+        ignored_package=None,
+    ):
         self.conf_file = conf_file
         self.package = Package(package_name)
 
@@ -163,9 +182,13 @@ class ApiReferenceDoc(object):
                 {{ sub_module_name1}} <{{ sub_module_name1}}>
                 {{ sub_module_name2}} <{{ sub_module_name2}}>
 
+        :type package: Package
         """
         if isinstance(package, Package):
-            return package.render(ignored_package=self.ignored_package)
+            return render_package(
+                package=package,
+                ignored_package=self.ignored_package
+            )
         else:  # pragma: no cover
             raise Exception("%r is not a Package object" % package)
 
@@ -181,6 +204,6 @@ class ApiReferenceDoc(object):
                 :members:
         """
         if isinstance(module, Module):
-            return module.render()
+            return render_module(module)
         else:  # pragma: no cover
             raise Exception("%r is not a Module object" % module)

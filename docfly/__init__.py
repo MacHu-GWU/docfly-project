@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """
@@ -6,8 +5,8 @@ docfly package.
 """
 
 from __future__ import print_function
+from ._version import __version__
 
-__version__ = "0.0.18"
 __short_description__ = "A utility tool to help you build better sphinx documents."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
@@ -18,6 +17,7 @@ __github_username__ = "MacHu-GWU"
 
 try:
     from .api_reference_doc import ApiReferenceDoc
-    from .doctree import DocTree
+    from .doctree import ArticleFolder
+    from . import directives
 except Exception as e:  # pragma: no cover
     print(e)
