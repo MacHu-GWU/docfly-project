@@ -100,14 +100,14 @@ todo_include_todos = True
 html_theme = 'furo'
 html_theme_options = {
     "sidebar_hide_name": False,
-    "light_css_variables": {
-        "color-brand-primary": "white",
-        "color-brand-content": "black",
-    },
-    "dark_css_variables": {
-        "color-brand-primary": "black",
-        "color-brand-content": "white",
-    },
+    # "light_css_variables": {
+    #     "color-brand-primary": "white",
+    #     "color-brand-content": "black",
+    # },
+    # "dark_css_variables": {
+    #     "color-brand-primary": "black",
+    #     "color-brand-content": "white",
+    # },
 }
 pygments_dark_style = "monokai"
 
