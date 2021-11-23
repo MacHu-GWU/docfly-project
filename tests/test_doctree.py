@@ -45,9 +45,7 @@ class TestArticleFolder(object):
         assert "第2章 <Section2/index_cn.rst>" in rst_directive
         assert "第3章 <Section3/index_cn.rst>" in rst_directive
 
-    def test_toc(self):
-        af = ArticleFolder(index_file="index_cn.rst", dir_path="/Users/sanhehu/Documents/GitHub/docfly-project/docs/source")
-        print(af.toc_directive())
+
 if __name__ == "__main__":
     import os
 
