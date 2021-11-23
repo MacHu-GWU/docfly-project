@@ -101,12 +101,12 @@ html_theme = 'furo'
 html_theme_options = {
     "sidebar_hide_name": False,
     "light_css_variables": {
-        "color-brand-primary": "#7C4DFF",
-        "color-brand-content": "#7C4DFF",
+        "color-brand-primary": "white",
+        "color-brand-content": "black",
     },
     "dark_css_variables": {
-        "color-brand-primary": "#7C4DFF",
-        "color-brand-content": "#7C4DFF",
+        "color-brand-primary": "black",
+        "color-brand-content": "white",
     },
 }
 pygments_dark_style = "monokai"
