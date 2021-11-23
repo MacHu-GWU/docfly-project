@@ -43,6 +43,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinx_copybutton',
     'sphinx_inline_tabs',
     'docfly.directives',
 ]
@@ -99,7 +100,14 @@ todo_include_todos = True
 html_theme = 'furo'
 html_theme_options = {
     "sidebar_hide_name": False,
-    "dark_logo": "docfly-logo.png",
+    "light_css_variables": {
+        "color-brand-primary": "#7C4DFF",
+        "color-brand-content": "#7C4DFF",
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#7C4DFF",
+        "color-brand-content": "#7C4DFF",
+    },
 }
 pygments_dark_style = "monokai"
 
@@ -181,13 +189,10 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 autodoc_member_order = 'bysource'
 
 # Enable custom css
-try:
-    custom_style_file_path = os.path.join(os.path.dirname(__file__), "_static", ".custom-style.rst")
-    with open(custom_style_file_path, "rb") as f:
-        custom_style_file_content = f.read().decode("utf-8")
-    rst_prolog = "\n" + custom_style_file_content + "\n"
-except:
-    pass
+custom_style_file_path = os.path.join(os.path.dirname(__file__), "_static", ".custom-style.rst")
+with open(custom_style_file_path, "rb") as f:
+    custom_style_file_content = f.read().decode("utf-8")
+rst_prolog = "\n" + custom_style_file_content + "\n"
 
 # Api Reference Doc
 import docfly
