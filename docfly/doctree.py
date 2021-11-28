@@ -25,8 +25,11 @@ class ArticleFolder(object):
 
     一篇 Article 代表着一个位于文件夹内的 ``index.rst`` 文件. 其中必然有至少一个标题元素.
     """
+    DEFAULT_INDEX_FILE = "index.rst"
 
-    def __init__(self, index_file="index.rst", dir_path=None):
+    def __init__(self, index_file=None, dir_path=None):
+        if index_file is None:
+            index_file = self.DEFAULT_INDEX_FILE
         self.index_file = index_file
         self.dir_path = dir_path
         self._title = None
