@@ -86,7 +86,7 @@ if __name__ == "__main__":
         PY_MODULES = [PKG_NAME, ]
 
     # The project directory name is the GitHub repository name
-    repository_name = os.path.basename(os.path.dirname(__file__))
+    repository_name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
 
     # Project Url
     URL = "https://github.com/{0}/{1}".format(GITHUB_USERNAME, repository_name)
@@ -119,10 +119,11 @@ if __name__ == "__main__":
         "Operating System :: MacOS",
         "Operating System :: Unix",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3 :: Only",
     ]
     """
     Full list can be found at: https://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -224,7 +225,7 @@ Frequent used classifiers List = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS",
     "Operating System :: Unix",
-
+    
     "Programming Language :: Python",
     "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 2.7",
@@ -233,6 +234,10 @@ Frequent used classifiers List = [
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3 :: Only",
 ]
 """

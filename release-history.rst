@@ -14,11 +14,12 @@ Backlog (TODO)
 **Miscellaneous**
 
 
-1.0.3 (2023-02-27)
+1.1.1 (2023-02-27)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Miscellaneous**
 
 - upgrade vendor package ``picage`` to 0.2.1.
+- drop support for <=3.6, only support >=3.7
 
 
 1.0.2 (2021-11-28)
