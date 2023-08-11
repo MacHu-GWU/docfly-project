@@ -16,9 +16,9 @@ class TestArticleFolder(object):
         af = ArticleFolder(dir_path=dir_test_source.append_parts("Section1").abspath)
         assert af.title == "Section1"
 
-        af = ArticleFolder(index_file="index_cn.rst", dir_path=dir_test_source.abspath)
+        af = ArticleFolder(index_file="index_cn", dir_path=dir_test_source.abspath)
         assert af.title == "欢迎来到此文档"
-        af = ArticleFolder(index_file="index_cn.rst", dir_path=dir_test_source.append_parts("Section1").abspath)
+        af = ArticleFolder(index_file="index_cn", dir_path=dir_test_source.append_parts("Section1").abspath)
         assert af.title == "第1章"
 
     def test_sub_article_folders(self):
@@ -27,7 +27,7 @@ class TestArticleFolder(object):
         for ind, sub_af in enumerate(af.sub_article_folders):
             assert sub_af.title == "Section{}".format(ind + 1)
 
-        af = ArticleFolder(index_file="index_cn.rst", dir_path=dir_test_source.abspath)
+        af = ArticleFolder(index_file="index_cn", dir_path=dir_test_source.abspath)
         assert len(af.sub_article_folders) == 3
         for ind, sub_af in enumerate(af.sub_article_folders):
             assert sub_af.title == "第{}章".format(ind + 1)
@@ -35,15 +35,15 @@ class TestArticleFolder(object):
     def test_toc_directive(self):
         af = ArticleFolder(dir_path=dir_test_source.abspath)
         rst_directive = af.toc_directive()
-        assert "Section1 <Section1/index.rst>" in rst_directive
-        assert "Section2 <Section2/index.rst>" in rst_directive
-        assert "Section3 <Section3/index.rst>" in rst_directive
+        assert "Section1 <Section1/index>" in rst_directive
+        assert "Section2 <Section2/index>" in rst_directive
+        assert "Section3 <Section3/index>" in rst_directive
 
-        af = ArticleFolder(index_file="index_cn.rst", dir_path=dir_test_source.abspath)
+        af = ArticleFolder(index_file="index_cn", dir_path=dir_test_source.abspath)
         rst_directive = af.toc_directive()
-        assert "第1章 <Section1/index_cn.rst>" in rst_directive
-        assert "第2章 <Section2/index_cn.rst>" in rst_directive
-        assert "第3章 <Section3/index_cn.rst>" in rst_directive
+        assert "第1章 <Section1/index_cn>" in rst_directive
+        assert "第2章 <Section2/index_cn>" in rst_directive
+        assert "第3章 <Section3/index_cn>" in rst_directive
 
 
 if __name__ == "__main__":

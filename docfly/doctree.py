@@ -7,6 +7,8 @@ Create doc tree if you follows
 """
 
 from __future__ import print_function
+import json
+
 from pathlib_mate import PathCls as Path
 
 from .template import TC
@@ -15,17 +17,17 @@ from .pkg import textfile
 
 class ArticleFolder(object):
     """
-    Represent an ``index.rst`` file with Title sitting in a directory.
+    Represent an ``index.rst`` or ``index.ipynb`` file with a Title in a directory.
 
+    :param index_file: the index file name (no file extension)
     :param dir_path: A folder contains single rst file. The rst file path
-        will be ``{dir_path}/{_filename}``.
-    :param title: The title line above '=========='
 
     **中文文档**
 
-    一篇 Article 代表着一个位于文件夹内的 ``index.rst`` 文件. 其中必然有至少一个标题元素.
+    一篇 Article 代表着文件夹中有一个 ``index.rst`` 或 ``index.ipynb`` 文件的文件夹.
+    其中必然有至少一个标题元素.
     """
-    DEFAULT_INDEX_FILE = "index.rst"
+    DEFAULT_INDEX_FILE = "index"
 
     def __init__(self, index_file=None, dir_path=None):
         if index_file is None:
@@ -39,7 +41,14 @@ class ArticleFolder(object):
         """
         The actual rst file absolute path.
         """
-        return Path(self.dir_path, self.index_file).abspath
+        return Path(self.dir_path, self.index_file + ".rst").abspath
+
+    @property
+    def ipynb_path(self):
+        """
+        The actual ipynb file absolute path.
+        """
+        return Path(self.dir_path, self.index_file + ".ipynb").abspath
 
     @property
     def rel_path(self):
@@ -54,10 +63,15 @@ class ArticleFolder(object):
         Title for the first header.
         """
         if self._title is None:
-            self._title = self.get_title()
+            if Path(self.rst_path).exists():
+                self._title = self.get_title_from_rst()
+            elif Path(self.ipynb_path).exists():
+                self._title = self.get_title_from_ipynb()
+            else:
+                pass
         return self._title
 
-    def get_title(self):
+    def get_title_from_rst(self):
         """
         Get title line from .rst file.
 
@@ -92,6 +106,25 @@ class ArticleFolder(object):
             cursor_previous_line = cursor_line
 
         msg = "Warning, this document doesn't have any %s header!" % header_bar_char_list
+        return None
+
+    def get_title_from_ipynb(self):
+        """
+        Get title line from .ipynb file.
+
+        **中文文档**
+
+        从一个 ``_filename`` 所指定的 .ipynb 文件中, 找到顶级标题.
+        也就是第一个 ``#`` 后面的部分
+        """
+        data = json.loads(Path(self.ipynb_path).read_text())
+        for row in data["cells"]:
+            if len(row["source"]):
+                content = row["source"][0]
+                line = content.split("\n")[0]
+                if "# " in line:
+                    return line[2:].strip()
+        msg = "Warning, this document doesn't have any level 1 header!"
         return None
 
     @property

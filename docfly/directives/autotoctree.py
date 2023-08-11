@@ -37,7 +37,7 @@ class AutoTocTree(Directive):
     """
     _opt_append_ahead = "append_ahead"
     _opt_index_file = "index_file"
-    _opt_index_file_default = "index.rst"
+    _opt_index_file_default = "index"
 
     has_content = True
     option_spec = TocTree.option_spec.copy()
@@ -104,4 +104,5 @@ class AutoTocTree(Directive):
                 lines.append(TAB + line)
 
         lines.append("")
-        return "\n".join(lines)
+        toctree = "\n".join(lines)
+        return toctree

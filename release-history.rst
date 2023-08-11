@@ -3,6 +3,7 @@
 Release and Version History
 ===========================
 
+
 Backlog (TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
@@ -12,6 +13,17 @@ Backlog (TODO)
 **Bugfixes**
 
 **Miscellaneous**
+
+
+2.0.1 (2023-08-11)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Breaking change**
+
+- from 2.X, the ``.. autotoctree::`` directive's ``:index_file:`` option should only include the file base name. For example, if you want to include ``index.rst``, you should define ``:index_file: index``. This is because we start to support more file extension like ``.ipynb``.
+
+**Features and Improvements**
+
+- Add support to automatically create ``.. toctree`` directive for folder that has an ``index.ipynb``.
 
 
 1.1.1 (2023-02-27)
