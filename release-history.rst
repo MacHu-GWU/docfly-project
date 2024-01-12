@@ -15,6 +15,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+2.0.2 (2024-01-12)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minor Improvements**
+
+- Upgrade picage to 0.2.2 to support both hyphen and underscore in package names.
+
+
 2.0.1 (2023-08-11)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Breaking change**
