@@ -15,6 +15,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+2.0.3 (2024-02-02)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Bugfixes**
+
+- Fix a bug that unable to locate the notebook title when the header 1 is a raw-restructuredText cell.
+
+
 2.0.2 (2024-01-12)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**
