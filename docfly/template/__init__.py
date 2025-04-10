@@ -35,7 +35,8 @@ ModuleTemplateParams = Module
 
 def render_module(params: ModuleTemplateParams) -> str:
     """
-    Render module template.
+    Render `module template <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/module.tpl>`_
+    for Sphinx documentation.
 
     Example module ``docfly.auto_api_doc``:
 
@@ -49,7 +50,6 @@ def render_module(params: ModuleTemplateParams) -> str:
         .. automodule:: docfly.auto_api_doc
             :members:
 
-    See: https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/module.tpl
     """
     return TemplateEnum.module.render(params=params)
 
@@ -63,7 +63,8 @@ class PackageTemplateParams:
 
 def render_package(params: PackageTemplateParams) -> str:
     """
-    Render module template for Sphinx documentation.
+    Render `package template <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/package.tpl>`_
+    for Sphinx documentation.
 
     Example package ``docfly``:
 
@@ -89,7 +90,7 @@ def render_package(params: PackageTemplateParams) -> str:
             auto_api_doc <auto_api_doc>
             autotoctree <autotoctree>
 
-    See: https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/package.tpl
+    See:
     """
     return TemplateEnum.package.render(params=params)
 
@@ -102,7 +103,8 @@ class TocTemplateParams:
 
 def render_toc(params: TocTemplateParams) -> str:
     """
-    Render toc template.
+    Render `toctree template <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/toc.tpl>`_
+    for Sphinx documentation.
 
     Example table of content tree
     `docfly project docs/sources <https://github.com/MacHu-GWU/docfly-project/tree/main/docs/source>`_:
@@ -111,6 +113,6 @@ def render_toc(params: TocTemplateParams) -> str:
 
     .. code-block::
 
-    See: https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/toc.tpl
+    See:
     """
     return TemplateEnum.toc.render(params=params)
