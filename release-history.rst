@@ -15,6 +15,32 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+3.0.0 (2025-04-10)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**💥Breaking Change**
+
+- Prior to 2.X.Y, the package maintained compatibility with Python 2.7 ~ 3.8, which came with significant technical burden. In 3.X.Y, we reworked the public API, greatly improved the API design, unit tests, and documentation. The package now only supports Python 3.9+.
+
+**Features and Improvements**
+
+- Now we support the following Public APIs:
+    - ``docfly.api.ApiDocGenerator``
+    - ``docfly.api.IndexFileNotFoundError``
+    - ``docfly.api.PageFolder``
+    - ``docfly.api.AutoTocTree``
+    - ``docfly.api.directives``
+
+**Minor Improvements**
+
+- Add support for ``nbconvert>=7.16.5`` due to a change in the MIME type of Raw ReStructuredText cells from ``text/restructuredtext`` to ``text/x-rst``.
+
+**Bugfixes**
+
+**Miscellaneous**
+
+- Migrate to ``https://github.com/MacHu-GWU/cookiecutter-pywf_open_source@0.1.1`` code skeleton.
+
+
 2.0.3 (2024-02-02)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Bugfixes**
