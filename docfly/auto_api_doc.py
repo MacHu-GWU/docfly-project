@@ -11,7 +11,8 @@ from pathlib import Path
 from functools import cached_property
 
 from .template import (
-    TemplateEnum, render_module,
+    TemplateEnum,
+    render_module,
     PackageTemplateParams,
     render_package,
 )
@@ -49,32 +50,32 @@ def should_ignore(
     return False
 
 
-def render_package(package: Package, ignore_patterns: list[str]) -> str:
-    """
-    .. code-block::
-
-        {{ package_name }}
-        ==================
-
-        .. automodule:: {{ package_name }}
-            :members:
-
-        sub packages and modules
-        ------------------------
-
-        .. toctree::
-           :maxdepth: 1
-
-            {{ sub_package_name1 }} <{{ sub_package_name1 }}/__init__>
-            {{ sub_package_name2 }} <{{ sub_package_name2 }}/__init__>
-            {{ sub_module_name1}} <{{ sub_module_name1}}>
-            {{ sub_module_name2}} <{{ sub_module_name2}}>
-    """
-    return TemplateEnum.package.render(
-        package=package,
-        ignore_patterns=ignore_patterns,
-        is_ignored=is_ignored,
-    )
+# def render_package(package: Package, ignore_patterns: list[str]) -> str:
+#     """
+#     .. code-block::
+#
+#         {{ package_name }}
+#         ==================
+#
+#         .. automodule:: {{ package_name }}
+#             :members:
+#
+#         sub packages and modules
+#         ------------------------
+#
+#         .. toctree::
+#            :maxdepth: 1
+#
+#             {{ sub_package_name1 }} <{{ sub_package_name1 }}/__init__>
+#             {{ sub_package_name2 }} <{{ sub_package_name2 }}/__init__>
+#             {{ sub_module_name1}} <{{ sub_module_name1}}>
+#             {{ sub_module_name2}} <{{ sub_module_name2}}>
+#     """
+#     return TemplateEnum.package.render(
+#         package=package,
+#         ignore_patterns=ignore_patterns,
+#         is_ignored=is_ignored,
+#     )
 
 
 def write_file(path: Path, text: str):
@@ -86,7 +87,7 @@ def write_file(path: Path, text: str):
 
 
 @dataclasses.dataclass
-class ApiReferenceDoc:
+class ApiDocGenerator:
     """
     A class to generate sphinx-doc api reference part.
 
@@ -151,18 +152,31 @@ class ApiReferenceDoc:
             shutil.rmtree(self.dir_output, ignore_errors=True)
 
         # create .rst files
-        for pkg, parent, sub_packages, sub_modules in self.package.walk():
-            if should_ignore(fullname=pkg.fullname, normalized_patterns=self.ignore_patterns):
+        for package, parent, sub_packages, sub_modules in self.package.walk():
+            if should_ignore(package.fullname, self.ignore_patterns):
                 continue
+            filtered_sub_packages = [
+                sub_package
+                for sub_package in sub_packages
+                if should_ignore(sub_package.fullname, self.ignore_patterns) is False
+            ]
+            filtered_sub_modules = [
+                sub_module
+                for sub_module in sub_modules
+                if should_ignore(sub_module.fullname, self.ignore_patterns) is False
+            ]
+            package_template_params = PackageTemplateParams(
+                package=package,
+                sub_packages=filtered_sub_packages,
+                sub_modules=filtered_sub_modules,
+            )
 
-            dir_package = self.dir_output.joinpath(*pkg.fullname.split("."))
+            dir_package = self.dir_output.joinpath(*package.fullname.split("."))
             path_init_rst = dir_package.joinpath("__init__.rst")
-            content = render_package(package=pkg, ignore_patterns=self.ignore_patterns)
+            content = render_package(package_template_params)
             write_file(path_init_rst, content)
 
-            for mod in sub_modules:
-                if is_ignored(mod_or_pkg=mod, patterns=self.ignore_patterns):
-                    continue
-                path_module = dir_package.joinpath(f"{mod.shortname}.rst")
-                content = render_module(mod)
+            for module in filtered_sub_modules:
+                path_module = dir_package.joinpath(f"{module.shortname}.rst")
+                content = render_module(module)
                 write_file(path_module, content)

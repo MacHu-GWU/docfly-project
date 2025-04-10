@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from docfly.template import TemplateEnum, render_module
+import textwrap
+from docfly.template import (
+    TemplateEnum,
+    render_module,
+    PackageTemplateParams,
+    render_package,
+)
 from docfly.vendor.picage import Package, Module
 
 # from docfly.template import T
@@ -9,26 +15,62 @@ from docfly.vendor.picage import Package, Module
 
 def test_render_module():
     module = Module("docfly.paths")
-    text = render_module(params=module)
-    # print(text)  # for debug only
-    expected_lines = [
-        "paths",
-        "=====",
-        "",
-        ".. automodule:: docfly.paths",
-        "    :members:",
+    content = render_module(params=module)
+    # print(content)  # for debug only
+    expected_content = textwrap.dedent(
+        """
+        paths
+        =====
+        
+        .. automodule:: docfly.paths
+            :members:
+        """
+    ).strip()
+    # print([content])  # for debug only
+    # print([expected_content])  # for debug only
+    assert content.strip() == expected_content
+
+
+def test_render_package():
+    package = Package("docfly")
+    sub_packages = [
+        Package("docfly.directives"),
+        Package("docfly.template"),
     ]
-    assert text.strip() == "\n".join(expected_lines)
-
-
-def _test():
-    pkg = Package("docfly")
-    text = TemplateEnum.package.render(
-        package=pkg,
-        ignored_packages=[],
-        is_ignored=is_ignored,
+    sub_modules = [
+        Module("docfly.auto_api_doc"),
+        Module("docfly.autotoctree"),
+    ]
+    params = PackageTemplateParams(
+        package=package,
+        sub_packages=sub_packages,
+        sub_modules=sub_modules,
     )
-    # print(text)  # for debug only
+    content = render_package(params)
+    print(content)  # for debug only
+    expected_content = textwrap.dedent(
+        """
+        docfly
+        ======
+        
+        .. automodule:: docfly
+            :members:
+        
+        sub packages and modules
+        ------------------------
+        
+        .. toctree::
+            :maxdepth: 1
+        
+            directives <directives/__init__>
+            template <template/__init__>
+            auto_api_doc <auto_api_doc>
+            autotoctree <autotoctree>
+    """
+    ).strip()
+    print([content])  # for debug only
+    print([expected_content])  # for debug only
+    assert content.strip() == expected_content
 
     # article = ArticleFolder(title="Hello World", path="hello-world/index.rst")
     # text = TC.toc.render(

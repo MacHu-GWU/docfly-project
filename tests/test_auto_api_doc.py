@@ -4,12 +4,10 @@ import shutil
 from pathlib import Path
 
 import docfly
-from docfly.vendor.picage import Package, Module
 from docfly.auto_api_doc import (
     normalize_ignore_patterns,
     should_ignore,
-    render_package,
-    ApiReferenceDoc,
+    ApiDocGenerator,
 )
 
 package_name = docfly.__name__
@@ -26,32 +24,35 @@ def test_should_ignore():
     assert should_ignore("jinja2.filters", ["jinja2.filters"]) is True
     assert should_ignore("jinja2.filters", ["jinja2.not_exists"]) is False
 
-#
-# def test_render_package():
-#     text = render_package(package=Package("jinja2"), ignore_patterns=[])
-#     # print(text)  # for debug only
-#
-#
-# class TestApiReferenceDoc(object):
-#     def test_fly(self):
-#         # clean up existing API document files generated this test case
-#         dir_source_package = dir_here.joinpath(package_name)
-#         shutil.rmtree(dir_source_package, ignore_errors=True)
-#
-#         doc = ApiReferenceDoc(
-#             conf_py_file=str(dir_here.joinpath("conf.py")),
-#             package_name=package_name,
-#             ignore_patterns=[
-#                 f"{package_name}.vendor",
-#                 f"{package_name}.paths.py",
-#             ],
-#         )
-#         doc.fly()
-#
-#         assert dir_source_package.joinpath("api_reference_doc.rst").exists() is True
-#         assert dir_source_package.joinpath("doctree.rst").exists() is True
-#         assert dir_source_package.joinpath("vendor").exists() is False
-#         assert dir_source_package.joinpath("paths.rst").exists() is False
+
+class TestApiDocGenerator(object):
+    def test_fly(self):
+        # clean up existing API document files generated this test case
+        dir_output = dir_here.joinpath("api")
+        shutil.rmtree(dir_output, ignore_errors=True)
+
+        # run docfly to generate API document files
+        doc = ApiDocGenerator(
+            dir_output=dir_output,
+            package_name="docfly",
+            ignore_patterns=[
+                f"docfly.vendor",
+                f"docfly._version.py",
+                f"docfly.paths.py",
+            ],
+        )
+        doc.fly()
+
+        # check the generated API document files
+        dir_docfly = dir_output.joinpath("docfly")
+
+        assert dir_docfly.joinpath("directives", "__init__.rst").exists() is True
+        assert dir_docfly.joinpath("directives", "autotoctree.rst").exists() is True
+        assert dir_docfly.joinpath("auto_api_doc.rst").exists() is True
+        assert dir_docfly.joinpath("autotoctree.rst").exists() is True
+
+        assert dir_docfly.joinpath("vendor").exists() is False
+        assert dir_docfly.joinpath("paths.rst").exists() is False
 
 
 if __name__ == "__main__":

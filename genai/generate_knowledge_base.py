@@ -27,6 +27,7 @@ gh_pipeline = GitHubPipeline(
     dir_repo=dir_project_root,
     include=[
         f"{PACKAGE_NAME}/**/*.py",
+        f"{PACKAGE_NAME}/**/*.tpl",
         "tests/**/*.py",
         "docs/source/**/index.rst",
         "docs/source/**/*.py",
