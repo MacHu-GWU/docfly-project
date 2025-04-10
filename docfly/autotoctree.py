@@ -26,7 +26,7 @@ import dataclasses
 from pathlib import Path
 from functools import cached_property
 
-from .template import TemplateEnum
+from .template import TocTemplateParams, render_toc
 
 T_INDEX_FILE_TYPE = T.Literal["rst", "md", "nb"]
 
@@ -112,7 +112,7 @@ class PageFolder:
         elif child_page_folder.path_index_ipynb.exists():
             child_page_folder.path_index_file = child_page_folder.path_index_ipynb
             child_page_folder.index_file_type = "nb"
-        elif child_page_folder.path_index_md.exists():
+        elif child_page_folder.path_index_md.exists():  # pragma: no cover
             child_page_folder.path_index_file = child_page_folder.path_index_md
             child_page_folder.index_file_type = "md"
         else:  # pragma: no cover
@@ -239,11 +239,11 @@ class PageFolder:
                 elif cell_type == "raw" and raw_mimetype in rst_mimetype:
                     try:
                         line = row["source"][3].strip()
-                    except IndexError:
+                    except IndexError:  # pragma: no cover
                         continue
                     try:
                         title_line = row["source"][2].strip()
-                    except IndexError:
+                    except IndexError:  # pragma: no cover
                         continue
                     for header_bar_char in header_bar_char_list:
                         if line.startswith(header_bar_char):
@@ -256,7 +256,7 @@ class PageFolder:
                                 and flag_previous_line_not_empty
                             ):
                                 return title_line
-                else:
+                else:  # pragma: no cover
                     pass
         return None
 
@@ -298,13 +298,13 @@ class PageFolder:
             try:
                 if child_page_folder.title is not None:
                     child_page_folders.append(child_page_folder)
-                else:
+                else:  # pragma: no cover
                     print(
                         f"Warning: cannot detect title in "
                         f"{child_page_folder.path_index_file} file"
                     )
             # skip folders that is failed to extract title
-            except:
+            except:  # pragma: no cover
                 pass
         return child_page_folders
 
@@ -319,8 +319,9 @@ class PageFolder:
 
         :return: Complete toctree directive as a string
         """
-        articles_directive_content = TemplateEnum.toc.render(
+        params = TocTemplateParams(
+            page_folders=self.child_page_folders,
             maxdepth=maxdepth,
-            child_page_folders=self.child_page_folders,
         )
+        articles_directive_content = render_toc(params)
         return articles_directive_content

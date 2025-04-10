@@ -12,13 +12,12 @@ Release v\ |release| (:ref:`What's new? <release_history>`).
 ------------------------------------------------------------------------------
 .. autotoctree::
     :maxdepth: 1
-    :index_file: index_cn.rst
+    :index_file: index_cn
 
 .. include:: ../../AUTHORS.rst
 
 
 API 文档
 ------------------------------------------------------------------------------
-
-* :ref:`by Name <genindex>`
-* :ref:`by Structure <modindex>`
+- :ref:`by Name <genindex>`
+- :ref:`by Structure <modindex>`

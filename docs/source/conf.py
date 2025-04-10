@@ -232,9 +232,9 @@ jinja_contexts = {
 
 # Api Reference Doc
 from pathlib import Path
-from docfly.api import ApiDocGenerator
+import docfly.api as docfly
 
-ApiDocGenerator(
+docfly.ApiDocGenerator(
     dir_output=Path(__file__).absolute().parent.joinpath("api"),
     package_name=package_name,
     ignore_patterns=[

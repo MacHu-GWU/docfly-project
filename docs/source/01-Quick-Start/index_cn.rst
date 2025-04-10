@@ -1,71 +1,114 @@
-.. _cn_docfly_quick_start:
+.. _cn-docfly-quick-start:
 
 docfly 快速开始
 ==============================================================================
-
-- :ref:`English <en_docfly_quick_start>`
-- :ref:`中文 <cn_docfly_quick_start>`
-
-``docfly`` 是一个帮助你更容易地使用 `sphinx-doc <http://www.sphinx-doc.org/en/stable/index.html>`_ 来构建你的文档网站的工具. 目前有两大杀手级功能:
-
-- 自动生成 API 文档.
-- 自动生成 toc 目录.
+- :ref:`English <en-docfly-quick-start>`
+- :ref:`中文 <cn-docfly-quick-start>`
 
 
-自动生成 API 文档
+关于 docfly
 ------------------------------------------------------------------------------
+``docfly`` 是一个强大的工具，通过自动化重复性任务来简化 `Sphinx 文档 <http://www.sphinx-doc.org/en/stable/index.html>`_ 的创建过程。本指南将帮助您快速实现 docfly 的两个关键功能：
 
-如果你在为你的 Python 代码写文档, Sphinx doc 有一个杀手级的功能: 自动从源代码中摘取 docstring, 生成 API 文档供你搜索, 查询, 引用. 但是, 你需要手动编写大量代码告诉 Sphinx doc 哪些模块你想要自动为它生成文档. 具体做法请参考 `这篇说明 <http://www.sphinx-doc.org/en/stable/ext/autodoc.html>`_. 也就是说, 你还是需要手动为你的每一个 ``.py`` 文件创建 ``.rst`` 文件, 然后手动告诉 sphinx 哪些模块和函数需要自动文档.
+1. **自动生成 API 参考文档**：从 Python 源代码生成全面的 API 文档
+2. **自动生成目录**：创建并维护与文件夹结构保持同步的 ``toctree`` 指令
 
-``docfly`` 的 **杀手级功能** 是, 只要你指定包的名称, 就能自动分析你的源代码, 然后自动为每一个 ``.py`` 文件, 每一个类, 每一个函数, 生成 ``:ref:`modindex``` 所需的一切文件. 并且在你的源代码结构发生变化之后, 自动更新. 下面我们就以 docfly 项目本身为例进行说明。你可以在 `这里 <https://github.com/MacHu-GWU/docfly-project/docs/source/conf.py>`_ 找到本文档中的示例代码.
+让我们通过实例了解如何使用这些功能。
 
-**使用方法**
 
-使用的方法很简单, 在你的 ``conf.py`` 文件中添加如下代码::
+安装 docfly
+------------------------------------------------------------------------------
+首先，通过 pip 安装 docfly：
 
-    import docfly
+.. code-block:: bash
 
-    #--- Api Reference Doc ---
-    package_name = docfly.__name__
+    pip install "docfly>=3.0.0,<4.0.0"
 
-    docfly.ApiReferenceDoc(
-        conf_file=__file__, # 指定 conf.py 文件路径
-        package_name=package_name, # 指定你要为其自动生成文档的包的名称
-        ignored_package=[ # 指定你不想为哪些子模块和子包生成文档
-            "%s.pkg" % package_name,
-        ]
+
+自动生成 API 参考文档
+------------------------------------------------------------------------------
+**问题**：Sphinx 可以使用 `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_ 扩展从源代码中提取文档字符串来创建 API 文档，但您仍需为每个模块、类和函数手动创建 `.rst` 文件——对于大型项目可能需要创建数百个文件。
+
+**解决方案**：docfly 自动扫描您的包结构并生成所有必要的 `.rst` 文件，包含适当的 autodoc 指令。
+
+**实现步骤**：
+
+在 Sphinx 的 ``conf.py`` `配置文件 <https://www.sphinx-doc.org/en/master/usage/configuration.html>`_ 中添加以下代码：
+
+.. code-block:: python
+
+    from pathlib import Path
+    import docfly.api as docfly
+    import your_package  # 在此导入您的包
+
+    # 配置 API 文档生成
+    docfly.ApiDocGenerator(
+        # 输出 .rst 文件的目录，它将是 ``conf.py`` 文件同级的 ``api`` 子目录
+        dir_output=Path(__file__).parent.joinpath("api"),
+        # 您的包名
+        package_name=your_package.__name__,
+        ignore_patterns=[
+            # 指定要排除的任何模块或包
+            f"{your_package.__name__}.tests",
+            f"{your_package.__name__}.vendor",
+            f"{your_package.__name__}._version.py",
+        ],
     ).fly()
 
-简单来说上面这段代码做了三件事:
+**结果**：下次当您运行 ``sphinx-build -b html docs/source build`` 构建文档时（假设 sphinx 配置文件位于 ``docs/source/conf.py``），``conf.py`` 中的这段代码将自动运行并生成如下文件夹结构：
 
-1. 告诉 ``docfly`` ``conf.py`` 文件在哪. 我们好在该目录下创建 ``.rst`` 文件.
-2. 告诉 ``docfly`` 我们要为哪个包生成自动 API 文档.
-3. 告诉 ``docfly`` 我们要排除掉哪些模块.
+.. code-block::
+
+    docs/source/api/your_package/
+    docs/source/api/your_package/subpackage/__init__.rst
+    docs/source/api/your_package/subpackage/module.rst
+    ...
+    docs/source/api/your_package/__init__.rst
+    docs/source/api/your_package/module.rst
+    ...
 
 
-自动生成 toc 目录
+自动生成目录
 ------------------------------------------------------------------------------
+**问题**：手动维护 ``.. toctree::`` 指令需要在每次添加、删除或重命名文档文件时更新它们。
 
-写一个文档网站就像写一本书. 分 Chapter, Section, ... 一级一级的往下延伸。而我们希望能自动地从上往下, 为每一章生成它下面每一节的链接, 同理一级一级的传递下去.
+**解决方案**：docfly 的 ``.. autotoctree::`` 指令会自动发现并链接到包含索引文件的子目录。
 
-根据 sphinx-doc 的 `官方文档 <http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#toctree-directive>`_, 你需要在你要生成目录的地方, 放置如下 Directive::
+**实现步骤**：
 
-    .. toctree::
-        :maxdepth: 1
+1. 首先，在 Sphinx 的 ``conf.py`` `配置文件 <https://www.sphinx-doc.org/en/master/usage/configuration.html>`_ 中启用 docfly 指令：
 
-        Title of your sub document <path-to-the-rst-file>
-        ...
-
-也就是说, 你仍然要手动的指定你要在目录中包括哪些子文档. 当你创建了新的 ``.rst`` 文件时, 你需要手动将其添加到 Directive 中去.
-
-而 ``docfly`` 的另一个重要功能就是: 只要你按照 :ref:`Sphinx 文档项目规范 <cn_sphinx_doc_style_guide>`, 那么仅仅使用 ``.. autotoctree::`` 标记, 就能自动发现当前目录下的子目录中的 ``index.rst`` 文档, 并在该处生成 ``.. toctree::`` 的索引 (见上面的代码块).
-
-**使用方法**
-
-你需要在 ``conf.py`` 中添加如下内容::
+.. code-block:: python
 
     extensions = [
-        ...
-        'docfly.directives', # 启用 docfly 的 directives
-        ...
+        # ... 其他扩展
+        'docfly.directives',  # 启用 docfly 指令
     ]
+
+2. 按照 :ref:`Sphinx 文档项目规范 <cn-sphinx-doc-style-guide>` 组织您的文档。例如：
+
+    .. code-block:: text
+
+        docs/
+        ├── source/
+        │   ├── index.rst
+        │   ├── installation/
+        │   │   └── index.rst
+        │   ├── tutorial/
+        │   │   └── index.rst
+        │   └── advanced/
+        │       └── index.rst
+
+3. 使用 ``autotoctree`` 指令替代手动 toctree 指令：
+
+.. dropdown:: source/index.rst
+
+    .. code-block:: rst
+
+        欢迎！
+        --------
+
+        .. autotoctree::
+            :maxdepth: 1
+
+**结果**：docfly 会自动发现所有带有索引文件的子目录，提取它们的标题，并创建格式正确的 toctree 指令。当您添加新章节时，它们会自动出现在目录中，无需手动更新。

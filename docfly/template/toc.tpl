@@ -1,6 +1,6 @@
 .. toctree::
-    :maxdepth: {{ maxdepth }}
+    :maxdepth: {{ params.maxdepth }}
 
-    {% for child_page_folder in child_page_folders -%}
-    {{ child_page_folder.title }} <{{ child_page_folder.path_str }}>
+    {% for page_folder in params.page_folders -%}
+    {{ page_folder.title }} <{{ page_folder.path_str }}>
     {% endfor -%}

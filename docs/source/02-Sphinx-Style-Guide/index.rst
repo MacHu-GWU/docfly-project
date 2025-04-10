@@ -1,84 +1,142 @@
-.. _en_sphinx_doc_style_guide:
+.. _en-sphinx-doc-style-guide:
 
 Sphinx Style Guide
 ==============================================================================
+- :ref:`English <en-sphinx-doc-style-guide>`
+- :ref:`中文 <cn-sphinx-doc-style-guide>`
 
-- :ref:`English <en_sphinx_doc_style_guide>`
-- :ref:`中文 <cn_sphinx_doc_style_guide>`
+These best practices stem from extensive experience with real-world projects. Following established conventions makes your documentation more readable while helping you avoid common pitfalls through proven patterns.
 
-每一个大型项目, 或是某一类的项目通常都有自己的项目规范. 这些规范都是从大量的实际项目经验中总结而来. 遵循一定的规范可以让你的代码更易读; 而前人的经验往往能帮助你避免很多你所没考虑到的问题.
-
-本规范是 ``docfly`` 在多年开发 sphinx-doc 插件, 以及建立 复杂的, 包含源代码 API 文档, 复杂树形结构, 多语言支持 等各种各样的文档项目总结的一套规范. 遵守该规范定义的一些模式可以大量的减少重复工作, 使你专注于文档本身.
+This guide presents best practices developed through years of working with Sphinx-doc, building complex documentation systems with API references, hierarchical structures, and multilingual support. By adhering to these recommendations, you can dramatically reduce repetitive work and focus on creating valuable content.
 
 
-Naming Convention
+File Organization
 ------------------------------------------------------------------------------
-1. Don't use " " (space) in file name or directory name
-2. Use ``-`` as much as possible. Because ``-`` is a valid character in URL, but ``_`` is not.
-3. Don't use Camel Case because it is not Python style.
-4. Use english character and digits, try to avoid using non ascii characters.
+Organize your Sphinx documentation in a logical hierarchy. A typical structure might look like:
+
+.. code-block:: text
+
+    docs/
+    ├── source/             # Source files (.rst, .md, .ipynb)
+    │   ├── _static/        # Static files (CSS, images)
+    │   ├── _templates/     # Custom templates
+    │   ├── conf.py         # Sphinx configuration
+    │   ├── index.rst       # Main entry point
+    │   ├── installation/   # Section directories
+    │   │   └── index.rst
+    │   ├── usage/
+    │   │   └── index.rst
+    │   └── api/            # API documentation (can be auto-generated)
+    │       └── ...
+    └── build/              # Generated output (HTML, PDF, etc.)
+        └── html/           # Generated HTML files
 
 
-.. _en_sphinx_doc_style_guide_page:
-
-Page
+Naming Conventions
 ------------------------------------------------------------------------------
-Each ``.rst`` file represent a html page in your document website. I recommend using a folder instead of a file for each page. For example, suppose you want to create a ``learn-sphinx-doc.rst`` file, you should do this::
+For consistent, maintainable documentation:
 
-    source
-    |--- learn-sphinx-doc # this is a directory
-        |--- index.rst # this is the equivalent of learn-sphinx-doc.rst
-    |--- index.rst # root
-
-and NOT do this::
-
-    source
-    |--- learn-sphinx-doc.rst
-    |--- index.rst # root
+1. **Avoid spaces in filenames and directories** - Use hyphens or underscores instead
+2. **Prefer hyphens over underscores** - Hyphens are valid in URLs, while underscores can cause issues
+3. **Use kebab-case for file and directory names** - For example, `user-guide.rst` not `UserGuide.rst`
+4. **Stick to ASCII characters** - Use English names and alphanumeric characters when possible
+5. **Be consistent** - Choose one naming convention and apply it throughout your project
 
 
-Image
+.. _en-sphinx-doc-style-guide-page:
+
+Page Organization
 ------------------------------------------------------------------------------
+**Recommended: Use Folder-Based Structure**
 
-If you follow the style defined in :ref:`en_sphinx_doc_style_guide_page`, Then you should put images related to a ``index.rst`` file in the same folder.
+Instead of a flat hierarchy with many .rst files, organize each major documentation section as a folder with an index file:
 
-Let's say you have a document ``example/index.rst``, there are lots of images ``chart1.png``, ``chart2.png``. Your file structure should look like this::
+.. code-block:: text
 
-    example
-    |--- images
-        |--- chart1.png
-        |--- chart2.png
-    |--- index.rst
+    # RECOMMENDED
+    docs/source/
+    ├── user-guide/           # A directory for the "User Guide" section
+    │   ├── index.rst         # The main content (equivalent to user-guide.rst)
+    │   ├── images/           # Section-specific images
+    │   │   ├── screenshot1.png
+    │   │   └── diagram.png
+    │   └── examples/         # Additional subsection files
+    │       └── index.rst
+    └── index.rst             # Root document
 
-Advantages:
+Rather than:
 
-1. images are isolated from the main document.
-2. in your rst code, you use this relative syntax to include a image ``.. image:: ./images/chart1.png``. It helps you to locate those images belongs to this specific ``index.rst`` file.
+.. code-block:: text
+
+    # NOT RECOMMENDED
+    docs/source/
+    ├── user-guide.rst        # A single file
+    ├── screenshot1.png       # Images mixed with documents
+    ├── diagram.png
+    ├── examples.rst
+    └── index.rst             # Root document
+
+**Benefits of folder-based organization:**
+
+1. **Better organization** - Related content stays together
+2. **Scalability** - Easy to add subsections and resources
+3. **Improved navigation** - Logical hierarchy for readers
+4. **Maintainability** - Easier to manage related assets
+5. **Cleaner directories** - No mixture of documents and resources
 
 
-Multi Language Support
+Image Management
 ------------------------------------------------------------------------------
+For consistent and maintainable image handling:
 
-If you want every html page to support multi language, the official method is very complicate. The official methods are (NOT RECOMMENDED):
+1. Create an ``images/`` subdirectory within each documentation section:
 
-1. use ``gentext`` plugin to translate the doc to target language, very poor translation quality.
-2. use the multi lang feature in ``readthedocs.org``, but you need to maintain multi git repo, it is very hard to keep them up-to-date.
+.. code-block:: text
 
-I recommend to follow the style defined in :ref:`en_sphinx_doc_style_guide_page`, and use ``_es.rst``, ``_cn.rst`` surfix to indicate the different lang version for the same document. It looks like this in your file system::
+    docs/source/user-guide/
+    ├── images/
+    │   ├── screenshot1.png
+    │   └── diagram.png
+    └── index.rst
+
+2. Reference images using relative paths:
+
+.. code-block:: rst
+
+    .. image:: ./images/screenshot1.png
+       :alt: Application Screenshot
+       :width: 80%
+
+3. **Consistent naming** - Use descriptive, hyphenated names for images
+4. **Optimize images** - Compress images to reduce size without sacrificing quality
+5. **Proper alt text** - Always include descriptive alt text for accessibility
+6. **Versioning** - Update images when interfaces change, maintaining consistency with text
+
+
+Multi-Language Support
+------------------------------------------------------------------------------
+If you want every HTML page to support multiple languages, the `official methods <https://www.sphinx-doc.org/en/master/usage/advanced/intl.html>`_ are overly complicated and not recommended. Basically what it does is:
+
+1. Use the `gentext plugin <https://www.gnu.org/software/gettext/manual/gettext.html#Introduction>`_ to translate the documentation into the target language - however, the translation quality is very poor.
+2. Use the `multilingual feature on readthedocs.org <https://docs.readthedocs.com/platform/stable/localization.html>`_, but this requires maintaining multiple Git repositories, which makes it difficult to keep them synchronized.
+
+Instead, I recommend following the style defined in :ref:`en-sphinx-doc-style-guide-page`, and using suffixes like ``_es.rst`` or ``_cn.rst`` to indicate different language versions of the same document. Your file structure might look like this::
 
     tutorial
-    |--- index.rst # english (default)
-    |--- index_es.rst # spanish (default)
-    |--- index_cn.rst # chinese (default)
+    |--- index.rst      # English (default)
+    |--- index_es.rst   # Spanish (default)
+    |--- index_cn.rst   # Chinese (default)
 
-Then you can use the reference link, such as ``.. _en_tutorial:``, ``.. _es_tutorial:``, ``.. _cn_tutorial:`` at the begin of your each ``.rst`` file. Then put this rst snippet right under your top header. It serves as a nagivator allow user to switch language::
+At the beginning of each ``.rst`` file, define a reference link such as ``.. _en_tutorial:``, ``.. _es_tutorial:``, or ``.. _cn_tutorial:``. Then, insert the following snippet below your top-level header to serve as a language switcher::
 
     - :ref:`English <en_tutorial>`
     - :ref:`española <es_tutorial>`
     - :ref:`中文 <cn_tutorial>`
 
- When you need ``.. autotoctree::`` for non-default (english) sub documents, you can use this option ``:index_file: index_cn.rst`` to locate sub documents that is in specific language::
+When you need to use ``.. autotoctree::`` for non-default (non-English) sub-documents, you can specify the language-specific index file with the ``:index_file:`` option, like this:
+
+When you need ``.. autotoctree::`` for non-default (english) sub documents, you can use this option ``:index_file: index_cn.rst`` to locate sub documents that is in specific language:::
 
     .. autotoctree::
         :maxdepth: 1
-        :index_file: index_es.rst
+        :index_file: index_cn.rst

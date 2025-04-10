@@ -73,11 +73,11 @@ class AutoTocTree(Directive):
 
         # Get the path of the current file containing this directive
         current_file = self.state.document.current_source
-        # print(f"[DEBUG] {current_file = }")  # for debug only
+        print(f"[DEBUG] {current_file = }")  # for debug only
 
         # Generate the RST content for the toctree
         output_rst = self.derive_toctree_rst(current_file)
-        # print(f"[DEBUG] {output_rst = }")  # for debug only
+        print(f"[DEBUG] {output_rst = }")  # for debug only
 
         # Convert the RST string into a list of lines with source information
         view_list = StringList(output_rst.splitlines(), source="")
@@ -139,7 +139,7 @@ class AutoTocTree(Directive):
             self._opt_index_file,
             self._opt_index_file_default,
         )
-        # print(f"[DEBUG] {index_file = }")  # for debug only
+        print(f"[DEBUG] {index_file = }")  # for debug only
 
         # Create ArticleFolder to scan the directory structure
         try:
