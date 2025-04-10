@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*-
 
 """
+Automatic Table of Contents (TOC) generator for Sphinx documentation.
 
-`toctree <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_ [explain the purpose here]
+This module provides tools to automatically generate Sphinx
+`toctree <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_
+directives based on your documentation's folder structure. Instead of manually maintaining
+TOC entries when adding or removing documentation pages, this functionality
+examines your directory structure and builds appropriate ``toctree`` directives
+with correct titles extracted from each document.
 
-This module provide utility to generate toctree directive base on your current folder structure
+The main workflow involves:
 
-:ref:`Sanhe Sphinx standard <en_sphinx_doc_style_guide>`.
+1. Finding directories containing index files (rst, md, or ipynb)
+2. Extracting the title from each index file
+3. Generating a properly formatted toctree directive linking to all child pages
+
+This approach ensures your documentation navigation stays organized and up-to-date
+with minimal manual intervention.
 """
 
 import typing as T
@@ -20,45 +31,55 @@ from .template import TemplateEnum
 T_INDEX_FILE_TYPE = T.Literal["rst", "md", "nb"]
 
 
+class IndexFileNotFoundError(FileNotFoundError):
+    pass
+
+
 @dataclasses.dataclass
 class PageFolder:
     """
-    Represent an ``index.rst`` or ``index.ipynb`` file with a Title in a directory.
+    Represents a folder containing an index document with a title.
 
-    :param index_file: the index file name (no file extension)
-    :param dir_path: A folder contains single rst file. The rst file path
+    A PageFolder typically maps to a documentation section with an index file
+    (index.rst, index.md, or index.ipynb) that contains a title. This class
+    provides methods to extract the title, find child page folders, and
+    generate a toctree directive linking to those children.
 
-    ::
+    The index file is searched in this order:
 
-        /current_folder
-        /current_folder/index.rst
-        /current_folder/subfolder_1/index.rst
-        /current_folder/subfolder_2/index.ipynb
-        /current_folder/subfolder_3/...
+    1. .rst (reStructuredText)
+    2. .ipynb (Jupyter Notebook)
+    3. .md (Markdown)
 
+    :param dir: Path to the directory containing the index file
+    :param index_filename: Base name of the index file without extension (default: "index")
 
-    content of ``/current_folder/index.rst``
+    Example folder structure::
 
-    .. code-block:: rest
+        docs/sources/
+        docs/sources/index.rst
+        docs/sources/document-1/index.rst
+        docs/sources/document-2/index.ipynb
+        docs/sources/document-3/index.md
+        docs/sources/document-3/...
 
-        .. autotoctree::
-            :maxdepth: 1
+    Usage:
 
-    will generate the following toctree directive
+    .. code-block:: python
 
-    .. code-block:: rest
+        # Create a PageFolder for the main docs directory
+        main_folder = PageFolder.new(dir=Path("docs/sources"))
 
-        .. toctree::
-            :maxdepth: 1
+        # Generate toctree directive
+        toc_content = main_folder.toc_directive()
 
-            Section1 <Section1/index>
-            Section2 <Section2/index>
-            Section3 <Section3/index>
-
-    **中文文档**
-
-    一篇 Article 代表着文件夹中有一个 ``index.rst`` 或 ``index.ipynb`` 文件的文件夹.
-    其中必然有至少一个标题元素.
+        # Result will be:
+        # .. toctree::
+        #     :maxdepth: 1
+        #
+        #     Document 1 <document-1/index>
+        #     Document 2 <document-2/index>
+        #     Document 3 <document-3/index>
     """
 
     dir: Path = dataclasses.field()
@@ -72,6 +93,16 @@ class PageFolder:
         dir: Path,
         index_filename: str = "index",
     ):
+        """
+        Create a new PageFolder instance with resolved index file.
+
+        This factory method creates a PageFolder instance and resolves
+        which type of index file exists (.rst, .ipynb, or .md).
+
+        TODO: 现在有一个问题是作为包含 ``.. autotoctree:`` 的父节点必须要是 RST, 你不能在 Notebook 里包含这个.
+        TODO: 我们需要将父节点的 index_filename 和 discover 阶段的子目录的 index_file 区分开来, 以后会实现.
+        """
+        index_filename = index_filename.split(".")[0]
         child_page_folder = cls(dir=dir, index_filename=index_filename)
         if child_page_folder.path_index_rst.exists():
             child_page_folder.path_index_file = child_page_folder.path_index_rst
@@ -85,7 +116,7 @@ class PageFolder:
             child_page_folder.path_index_file = child_page_folder.path_index_md
             child_page_folder.index_file_type = "md"
         else:  # pragma: no cover
-            raise FileNotFoundError(
+            raise IndexFileNotFoundError(
                 f"Cannot find index file in {child_page_folder.dir}"
             )
         return child_page_folder
@@ -93,39 +124,42 @@ class PageFolder:
     @property
     def path_index_rst(self) -> Path:
         """
-        The actual RestructuredText file absolute path.
+        Get the absolute path to the potential reStructuredText index file.
         """
         return self.dir.joinpath(f"{self.index_filename}.rst")
 
     @property
-    def path_index_md(self) -> Path:
-        """
-        The actual markdown file absolute path.
-        """
-        return self.dir.joinpath(f"{self.index_filename}.md")
-
-    @property
     def path_index_ipynb(self) -> Path:
         """
-        The actual Jupyter Notebook file absolute path.
+        Get the absolute path to the potential Jupyter Notebook index file.
         """
         return self.dir.joinpath(f"{self.index_filename}.ipynb")
 
     @property
+    def path_index_md(self) -> Path:
+        """
+        Get the absolute path to the potential Markdown index file.
+        """
+        return self.dir.joinpath(f"{self.index_filename}.md")
+
+    @property
     def path_str(self):
         """
-        File relative path from the folder.
+        Get the relative path string used in toctree entries.
         """
         return f"{self.dir.name}/{self.index_filename}"
 
     def get_title_from_rst(self) -> T.Optional[str]:
         """
-        Get title line from .rst file.
+        Extract title from a reStructuredText file.
 
-        **中文文档**
+        Finds the first section title by looking for underline patterns
+        (====, ----, etc.) and returns the text line above it.
 
-        从一个 ``_filename`` 所指定的 .rst 文件中, 找到顶级标题.
-        也就是第一个 ``====`` 或 ``----`` 或 ``~~~~`` 上面一行.
+        Also handles .. include:: directives by replacing them with
+        the content of the included file.
+
+        :return: Extracted title or None if no title found
         """
 
         # replace ``.. include::`` with the content of the included file
@@ -162,25 +196,27 @@ class PageFolder:
                         return cursor_previous_line.strip()
             cursor_previous_line = cursor_line
 
-        msg = (
-            "Warning, this document doesn't have any %s header!" % header_bar_char_list
-        )
-        print(msg)
         return None
 
     def get_title_from_md(self) -> T.Optional[str]:
+        """
+        Extract title from a Markdown file.
+
+        :return: Extracted title or None if no title found
+        :raises NotImplementedError: This method is not implemented yet
+        """
         raise NotImplementedError
 
     def get_title_from_ipynb(self) -> T.Optional[str]:
         """
-        Get title line from .ipynb file.
+        Extract title from a Jupyter Notebook file.
 
-        **中文文档**
+        Looks for a title in:
 
-        从一个 ``_filename`` 所指定的 .ipynb 文件中, 找到顶级标题.
-        也就是第一个 ``#`` 后面的部分.
+        1. The first markdown cell with a level 1 heading (# Title)
+        2. A raw reStructuredText cell with a title and underline
 
-        有的时候我们会用 raw RestructuredText 来做顶级标题.
+        :return: Extracted title or None if no title found
         """
         header_bar_char_list = "=-~+*#^"
 
@@ -222,9 +258,6 @@ class PageFolder:
                                 return title_line
                 else:
                     pass
-
-        msg = "Warning, this document doesn't have any level 1 header!"
-        print(msg)
         return None
 
     @cached_property
@@ -244,18 +277,32 @@ class PageFolder:
     @cached_property
     def child_page_folders(self) -> T.List["PageFolder"]:
         """
-        Returns all valid ArticleFolder sitting inside of
-        :attr:`ArticleFolder.dir_path`.
+        Find all valid child page folders.
+
+        Searches for directories containing index files with valid titles
+        and returns them as :class:`PageFolder` instances.
         """
         child_page_folders = list()
         dir_list = [path for path in self.dir.iterdir() if path.is_dir()]
         dir_list.sort()
 
         for dir in dir_list:
-            child_page_folder = self.__class__.new(dir=dir, index_filename=self.index_filename)
+            try:
+                child_page_folder = self.__class__.new(
+                    dir=dir, index_filename=self.index_filename
+                )
+            # skip folders that cannot find index file
+            except IndexFileNotFoundError:
+                continue
+
             try:
                 if child_page_folder.title is not None:
                     child_page_folders.append(child_page_folder)
+                else:
+                    print(
+                        f"Warning: cannot detect title in "
+                        f"{child_page_folder.path_index_file} file"
+                    )
             # skip folders that is failed to extract title
             except:
                 pass
@@ -263,13 +310,14 @@ class PageFolder:
 
     def toc_directive(self, maxdepth=1):
         """
-        Generate toctree directive text.
+        Generate a ``toctree`` directive for the child page folders.
 
-        :param table_of_content_header:
-        :param header_bar_char:
-        :param header_line_length:
-        :param maxdepth:
-        :return:
+        Creates a properly formatted reStructuredText ``toctree`` directive
+        that includes all child pages with their titles.
+
+        :param maxdepth: Maximum depth for the toctree directive
+
+        :return: Complete toctree directive as a string
         """
         articles_directive_content = TemplateEnum.toc.render(
             maxdepth=maxdepth,

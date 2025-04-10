@@ -1,27 +1,37 @@
 # -*- coding: utf-8 -*-
 
 """
-Create api reference doc.
+Automatic API reference documentation generator for Sphinx.
+
+While Sphinx's `autodoc extension <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
+lets you document Python modules, it still requires
+manually including each module and defining members in your documentation. This module
+automates that process by scanning your entire package structure and generating the
+necessary .rst files with proper autodoc directives for all modules and packages. It supports
+ignoring specific modules or packages through pattern matching, allowing you to exclude
+internal, private, or third-party code from your documentation.
 """
 
-import typing as T
 import shutil
 import dataclasses
 from pathlib import Path
 from functools import cached_property
 
 from .template import (
-    TemplateEnum,
     render_module,
     PackageTemplateParams,
     render_package,
 )
-from .vendor.picage import Package, Module
+from .vendor.picage import Package
 
 
 def normalize_ignore_patterns(patterns: list[str]) -> list[str]:
     """
-    Normalize ignore patterns to be used for ignoring modules/packages.
+    Normalize ignore patterns by removing ``.py`` extensions.
+
+    :param patterns: List of patterns to normalize
+
+    :return: List of normalized patterns
     """
     normalized = []
     for pattern in patterns:
@@ -36,13 +46,31 @@ def should_ignore(
     normalized_patterns: list[str],
 ) -> bool:
     """
-    Test, if this :class:`docfly.pkg.picage.Module`
-    or :class:`docfly.pkg.picage.Package` should be included to generate
-    API reference document.
+    Determine if a module or package should be ignored based on its name.
 
-    **中文文档**
+    Checks if the module or package fullname matches any of the ignore patterns.
+    A match occurs when the fullname starts with any pattern in the list.
 
-    根据全名判断一个包或者模块是否要被包含到自动生成的 API 文档中。
+    :param fullname: Full name of the module or package (e.g., "docfly.auto_api_doc")
+    :param normalized_patterns: List of normalized ignore patterns
+
+    :return: True if the module/package should be ignored, False otherwise
+
+    Examples:
+    >>> should_ignore("docfly.vendor", ["docfly.vendor"])
+    True
+
+    >>> should_ignore("docfly.vendor.picage", ["docfly.vendor"])
+    True
+
+    >>> should_ignore("docfly.auto_api_doc", ["docfly.vendor"])
+    False
+
+    >>> should_ignore("docfly.tests", ["docfly.tests", "docfly.vendor"])
+    True
+
+    >>> should_ignore("docfly._version", ["docfly._"])
+    True
     """
     for pattern in normalized_patterns:
         if fullname.startswith(pattern):
@@ -50,35 +78,10 @@ def should_ignore(
     return False
 
 
-# def render_package(package: Package, ignore_patterns: list[str]) -> str:
-#     """
-#     .. code-block::
-#
-#         {{ package_name }}
-#         ==================
-#
-#         .. automodule:: {{ package_name }}
-#             :members:
-#
-#         sub packages and modules
-#         ------------------------
-#
-#         .. toctree::
-#            :maxdepth: 1
-#
-#             {{ sub_package_name1 }} <{{ sub_package_name1 }}/__init__>
-#             {{ sub_package_name2 }} <{{ sub_package_name2 }}/__init__>
-#             {{ sub_module_name1}} <{{ sub_module_name1}}>
-#             {{ sub_module_name2}} <{{ sub_module_name2}}>
-#     """
-#     return TemplateEnum.package.render(
-#         package=package,
-#         ignore_patterns=ignore_patterns,
-#         is_ignored=is_ignored,
-#     )
-
-
 def write_file(path: Path, text: str):
+    """
+    Write text to a file, creating parent directories if needed.
+    """
     try:
         path.write_text(text, encoding="utf-8")
     except FileNotFoundError:
@@ -89,41 +92,42 @@ def write_file(path: Path, text: str):
 @dataclasses.dataclass
 class ApiDocGenerator:
     """
-    A class to generate sphinx-doc api reference part.
+    Generator for Sphinx API reference documentation.
 
-    Example::
+    This class traverses a Python package structure and generates ``.rst`` files with
+    appropriate autodoc directives for each module and package. The generated files
+    maintain the package hierarchy and can be directly included in Sphinx documentation.
 
-        package
-        |--- subpackage1
-            |--- __init__.rst
-            |--- module.rst
-        |--- subpackage2
-            |--- __init__.rst
-            |--- module.rst
-        |--- __init__.rst
-        |--- module1.rst
-        |--- module2.rst
+    Example generated autodoc code:
 
-    :param dir_output: the output of the autodoc code. Usually it next to the
-        sphinx doc ``conf.py`` file. For example if your ``conf.py`` file is
-        at ``docs/source/conf.py``, and your package name is ``docfly``, then
-        the autodoc code should locate at::
+    .. code-block:: bash
 
-        /docs/source/docfly
-        /docs/source/docfly/__init__.rst
-        /docs/source/docfly/module1.rst
-        /docs/source/docfly/module2.rst
-        /docs/source/docfly/...
+        /path/to/dir_output/package
+        /path/to/dir_output/package/subpackage1
+        /path/to/dir_output/package/subpackage1/__init__.rst
+        /path/to/dir_output/package/subpackage1/module.rst
+        /path/to/dir_output/package/subpackage2/
+        /path/to/dir_output/package/subpackage2/__init__.rst
+        /path/to/dir_output/package/subpackage2/module.rst
+        /path/to/dir_output/package/__init__.rst
+        /path/to/dir_output/package/module1.rst
+        /path/to/dir_output/package/module2.rst
 
-    :param package_name: the importable package name
-    :param ignore_patterns: default empty list, package, module relative
-        prefix you want to ignored
+    :param dir_output: Directory where generated ``.rst`` files will be written.
+        Usually it is next to the sphinx doc ``conf.py`` file. For example,
+        if your ``conf.py`` file is at ``docs/source/conf.py``, and your
+        package name is ``docfly``, you should set ``dir_output`` to ``docs/source/api``.
+        Then the autodoc code looks like::
 
-    **中文文档**
+            /docs/source/api/docfly
+            /docs/source/api/docfly/__init__.rst
+            /docs/source/api/docfly/module1.rst
+            /docs/source/api/docfly/module2.rst
+            /docs/source/api/docfly/...
 
-    如果你需要忽略一个包: 请使用 ``docfly.packages``
-    如果你需要忽略一个模块: 请使用 ``docfly.zzz_manual_install`` 或
-    ``docfly.zzz_manual_install.py``
+    :param package_name: Name of the package to document.
+    :param ignore_patterns: List of patterns for modules/packages to ignore.
+        See :func:`should_ignore` for details on how patterns are matched.
     """
 
     dir_output: Path = dataclasses.field()
@@ -136,7 +140,7 @@ class ApiDocGenerator:
     @cached_property
     def package(self) -> Package:
         """
-        The package object.
+        Get the package object for the specified package name.
         """
         return Package(self.package_name)
 
@@ -145,7 +149,14 @@ class ApiDocGenerator:
         cleanup_before_fly: bool = True,
     ):
         """
-        Generate doc tree.
+        Generate the API documentation .rst files.
+
+        Traverses the package structure and creates ``.rst`` files for each
+        package and module. Each package gets an ``__init__.rst`` file that
+        includes links to its sub-packages and modules.
+
+        :param cleanup_before_fly: If True, remove existing output directory
+            before generating new documentation
         """
         # clearn up existing api document
         if cleanup_before_fly:

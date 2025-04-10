@@ -25,12 +25,18 @@ def get_template(name: str) -> Template:
 
 
 class TemplateEnum:
+    """
+    Enum container for loaded Jinja2 templates.
+    """
     toc = get_template("toc")
     module = get_template("module")
     package = get_template("package")
 
 
 ModuleTemplateParams = Module
+"""
+Parameters for module template rendering.
+"""
 
 
 def render_module(params: ModuleTemplateParams) -> str:
@@ -38,9 +44,9 @@ def render_module(params: ModuleTemplateParams) -> str:
     Render `module template <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/module.tpl>`_
     for Sphinx documentation.
 
-    Example module ``docfly.auto_api_doc``:
+    Example module `docfly.auto_api_doc <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/auto_api_doc.py>`_:
 
-    Example rendered sphinx doc:
+    Example rendered document source:
 
     .. code-block::
 
@@ -56,6 +62,9 @@ def render_module(params: ModuleTemplateParams) -> str:
 
 @dataclasses.dataclass
 class PackageTemplateParams:
+    """
+    Parameters for package template rendering.
+    """
     package: Package = dataclasses.field()
     sub_packages: list[Package] = dataclasses.field()
     sub_modules: list[Module] = dataclasses.field()
@@ -66,9 +75,9 @@ def render_package(params: PackageTemplateParams) -> str:
     Render `package template <https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/package.tpl>`_
     for Sphinx documentation.
 
-    Example package ``docfly``:
+    Example package `docfly <https://github.com/MacHu-GWU/docfly-project/tree/main/docfly>`_:
 
-    Example rendered sphinx doc:
+    Example rendered document source:
 
     .. code-block::
 
@@ -86,7 +95,6 @@ def render_package(params: PackageTemplateParams) -> str:
 
             directives <directives/__init__>
             template <template/__init__>
-            tests <tests/__init__>
             auto_api_doc <auto_api_doc>
             autotoctree <autotoctree>
 
@@ -97,6 +105,9 @@ def render_package(params: PackageTemplateParams) -> str:
 
 @dataclasses.dataclass
 class TocTemplateParams:
+    """
+    Parameters for TOC template rendering.
+    """
     page_folders: list["PageFolder"] = dataclasses.field()
     maxdepth: T.Optional[int] = dataclasses.field(default=None)
 
@@ -109,10 +120,14 @@ def render_toc(params: TocTemplateParams) -> str:
     Example table of content tree
     `docfly project docs/sources <https://github.com/MacHu-GWU/docfly-project/tree/main/docs/source>`_:
 
-    Example rendered sphinx doc:
+    Example rendered document source:
 
     .. code-block::
 
-    See:
+        .. toctree::
+            :maxdepth: 1
+
+            Quick Start <01-Quick-Start/index>
+            Sphinx Style Guide <02-Sphinx-Style-Guide/index>
     """
     return TemplateEnum.toc.render(params=params)

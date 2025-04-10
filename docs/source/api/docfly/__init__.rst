@@ -12,7 +12,7 @@ sub packages and modules
 
     directives <directives/__init__>
     template <template/__init__>
-    api_reference_doc <api_reference_doc>
-    doctree <doctree>
-    util <util>
+    api <api>
+    auto_api_doc <auto_api_doc>
+    autotoctree <autotoctree>
     

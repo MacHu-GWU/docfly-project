@@ -10,7 +10,6 @@ Release v\ |release| (:ref:`What's new? <release_history>`).
 
 目录
 ------------------------------------------------------------------------------
-
 .. autotoctree::
     :maxdepth: 1
     :index_file: index_cn.rst
