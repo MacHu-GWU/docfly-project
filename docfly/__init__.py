@@ -15,9 +15,9 @@ __maintainer__ = "Sanhe Hu"
 __maintainer_email__ = "husanhe@me.com"
 __github_username__ = "MacHu-GWU"
 
-try:
-    from .api_reference_doc import ApiReferenceDoc
-    from .doctree import ArticleFolder
-    from . import directives
-except Exception as e:  # pragma: no cover
-    print(e)
+# try:
+#     from .api_reference_doc import ApiReferenceDoc
+#     from .autotoctree import PageFolder
+#     from . import directives
+# except Exception as e:  # pragma: no cover
+#     print(e)

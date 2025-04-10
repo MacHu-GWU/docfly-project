@@ -1,46 +1,74 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import jinja2
-try:
-    from ..pkg import textfile
-except:  # pragma: no cover
-    from docfly.pkg import textfile
+import typing as T
+import dataclasses
+from jinja2 import Template
+
+from ..paths import dir_package
+from ..vendor.picage import Package, Module
+
+if T.TYPE_CHECKING:
+    pass
 
 
-data = dict()
-dir_path = os.path.dirname(__file__)
-for basename in os.listdir(dir_path):
-    if basename.endswith(".tpl"):
-        fname, ext = os.path.splitext(basename)
-        abspath = os.path.join(dir_path, basename)
-        data[fname] = textfile.read(abspath)
+def get_template(name: str) -> Template:
+    path = dir_package.joinpath("template", f"{name}.tpl")
+    return Template(path.read_text(encoding="utf-8"))
 
 
-class TemplateCollection(object):
-    toc = jinja2.Template(data["toc"])
-    module = jinja2.Template(data["module"])
-    package = jinja2.Template(data["package"])
+class TemplateEnum:
+    toc = get_template("toc")
+    module = get_template("module")
+    package = get_template("package")
 
 
-TC = TemplateCollection
+ModuleTemplateParams = Module
 
 
-if __name__ == "__main__":
-    from docfly.pkg.picage import Package, Module
-    from docfly.doctree import Article
-    from docfly.api_reference_doc import is_ignored
+def render_module(params: ModuleTemplateParams) -> str:
+    """
+    Render module template.
 
-    pkg = Package("docfly")
-    text = TC.package.render(
-        package=pkg, ignored_packages=[], is_ignored=is_ignored)
-    print(text)
+    Example module ``docfly.auto_api_doc``:
 
-    module = Module("docfly.zzz_manual_install")
-    text = TC.module.render(module=module)
-    print(text)
+    Example rendered sphinx doc:
 
-    article = Article(title="Hello World", path="hello-world/index.rst")
-    text = TC.toc.render(header="Table of Content", article_list=[article, ])
-    print(text)
+    .. code-block::
+
+        auto_api_doc
+        ============
+
+        .. automodule:: docfly.auto_api_doc
+            :members:
+
+    See: https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/module.tpl
+    """
+    return TemplateEnum.module.render(params=params)
+
+
+@dataclasses.dataclass
+class PackageTemplateParams:
+    package: Package = dataclasses.field()
+    sub_modules: list[Module] = dataclasses.field()
+
+
+def render_package(params: PackageTemplateParams) -> str:
+    """
+    Render package template.
+
+    Example package ``docfly``:
+
+    Example rendered sphinx doc:
+
+    .. code-block::
+
+        auto_api_doc
+        ============
+
+        .. automodule:: docfly.auto_api_doc
+            :members:
+
+    See: https://github.com/MacHu-GWU/docfly-project/blob/main/docfly/template/module.tpl
+    """
+    return TemplateEnum.module.render(params=params)

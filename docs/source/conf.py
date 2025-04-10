@@ -189,14 +189,14 @@ rst_prolog = "\n" + custom_style_file_content + "\n"
 # Api Reference Doc
 import docfly
 
-package_name = docfly.__name__
-docfly.ApiReferenceDoc(
-    conf_file=__file__,
-    package_name=package_name,
-    ignored_package=[
-        "%s._version" % package_name,
-        "%s.docs" % package_name,
-        "%s.pkg" % package_name,
-        "%s.tests" % package_name,
-        ]
-).fly()
+# package_name = docfly.__name__
+# docfly.ApiReferenceDoc(
+#     conf_file=__file__,
+#     package_name=package_name,
+#     ignored_package=[
+#         "%s._version" % package_name,
+#         "%s.docs" % package_name,
+#         "%s.pkg" % package_name,
+#         "%s.tests" % package_name,
+#         ]
+# ).fly()

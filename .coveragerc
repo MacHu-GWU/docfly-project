@@ -1,9 +1,14 @@
 # Coverage.py is a tool for measuring code coverage of Python programs.
-# for more info: https://coverage.readthedocs.io/en/coverage-4.4.1/config.html
+# for more info: https://coverage.readthedocs.io/en/latest/config.html
 [run]
 omit =
-    docfly/pkg/*
+    docfly/docs/*
+    docfly/tests/*
+    docfly/vendor/*
     docfly/directives/*
+    docfly/_version.py
+    docfly/cli.py
+    docfly/paths.py
 
 [report]
 # Regexes for lines to exclude from consideration

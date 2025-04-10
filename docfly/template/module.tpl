@@ -1,5 +1,5 @@
-{{ module.shortname}}
-{{ "=" * module.shortname|length }}
+{{ params.shortname}}
+{{ "=" * params.shortname|length }}
 
-.. automodule:: {{ module.fullname }}
+.. automodule:: {{ params.fullname }}
     :members:

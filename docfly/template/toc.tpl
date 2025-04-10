@@ -1,6 +1,6 @@
 .. toctree::
     :maxdepth: {{ maxdepth }}
 
-    {% for article in article_list -%}
-    {{ article.title }} <{{ article.rel_path }}>
+    {% for child_page_folder in child_page_folders -%}
+    {{ child_page_folder.title }} <{{ child_page_folder.path_str }}>
     {% endfor -%}

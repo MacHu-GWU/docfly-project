@@ -1,7 +1,7 @@
 # User Settings
-docfly_venv/
 docfly.egg-info/
-docfly-*/
+docs/source/**/index.md
+tmp/
 tests/docfly/
 
 # Byte-compiled / optimized / DLL files
@@ -70,7 +70,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/build/
 
 # PyBuilder
 target/
