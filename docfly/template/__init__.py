@@ -7,12 +7,13 @@ Jinja2 Template rendering module for Sphinx documentation generation.
 
 import typing as T
 import dataclasses
+
 from jinja2 import Template
+from picage.api import Package, Module
 
-from ..paths import dir_package
-from ..vendor.picage import Package, Module
+from ..paths import path_enum
 
-if T.TYPE_CHECKING:
+if T.TYPE_CHECKING:  # pragma: no cover
     from ..autotoctree import PageFolder
 
 
@@ -20,7 +21,7 @@ def get_template(name: str) -> Template:
     """
     Load a Jinja2 template by name from the template directory.
     """
-    path = dir_package.joinpath("template", f"{name}.tpl")
+    path = path_enum.dir_package.joinpath("template", f"{name}.tpl")
     return Template(path.read_text(encoding="utf-8"))
 
 
@@ -28,6 +29,7 @@ class TemplateEnum:
     """
     Enum container for loaded Jinja2 templates.
     """
+
     toc = get_template("toc")
     module = get_template("module")
     package = get_template("package")
@@ -65,6 +67,7 @@ class PackageTemplateParams:
     """
     Parameters for package template rendering.
     """
+
     package: Package = dataclasses.field()
     sub_packages: list[Package] = dataclasses.field()
     sub_modules: list[Module] = dataclasses.field()
@@ -108,6 +111,7 @@ class TocTemplateParams:
     """
     Parameters for TOC template rendering.
     """
+
     page_folders: list["PageFolder"] = dataclasses.field()
     maxdepth: T.Optional[int] = dataclasses.field(default=None)
 

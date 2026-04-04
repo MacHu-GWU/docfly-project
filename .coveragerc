@@ -5,7 +5,6 @@ omit =
     docfly/docs/*
     docfly/tests/*
     docfly/vendor/*
-    docfly/directives/*
     docfly/_version.py
     docfly/cli.py
     docfly/paths.py

@@ -1,8 +1,9 @@
 # User Settings
 docfly.egg-info/
 docs/source/**/index.md
-tmp/
 tests/docfly/
+tmp/
+.claude/claude-code-message*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

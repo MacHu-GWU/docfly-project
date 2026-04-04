@@ -1,31 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import textwrap
-from docfly.template import (
-    TemplateEnum,
-    render_module,
-    PackageTemplateParams,
-    render_package,
-)
-from docfly.vendor.picage import Package, Module
+from docfly.template import render_module
+from docfly.template import PackageTemplateParams
+from docfly.template import render_package
 
-# from docfly.template import T
-# from docfly.api_reference_doc import is_ignored
+import textwrap
+
+from picage.api import Package, Module
 
 
 def test_render_module():
     module = Module("docfly.paths")
     content = render_module(params=module)
     # print(content)  # for debug only
-    expected_content = textwrap.dedent(
-        """
+    expected_content = textwrap.dedent("""
         paths
         =====
         
         .. automodule:: docfly.paths
             :members:
-        """
-    ).strip()
+        """).strip()
     # print([content])  # for debug only
     # print([expected_content])  # for debug only
     assert content.strip() == expected_content
@@ -48,8 +42,7 @@ def test_render_package():
     )
     content = render_package(params)
     print(content)  # for debug only
-    expected_content = textwrap.dedent(
-        """
+    expected_content = textwrap.dedent("""
         docfly
         ======
         
@@ -66,8 +59,7 @@ def test_render_package():
             template <template/__init__>
             auto_api_doc <auto_api_doc>
             autotoctree <autotoctree>
-    """
-    ).strip()
+    """).strip()
     print([content])  # for debug only
     print([expected_content])  # for debug only
     assert content.strip() == expected_content

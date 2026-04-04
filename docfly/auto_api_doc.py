@@ -22,7 +22,7 @@ from .template import (
     PackageTemplateParams,
     render_package,
 )
-from .vendor.picage import Package
+from picage.api import Package
 
 
 def normalize_ignore_patterns(patterns: list[str]) -> list[str]:
