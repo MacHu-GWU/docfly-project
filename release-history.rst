@@ -15,6 +15,21 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+3.0.1 (2026-04-04)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minor Improvements**
+
+- Remove the bundled ``docfly/vendor/picage`` vendor copy and switch to the external ``picage`` package (``picage.api``).
+- Refactor project path utilities into a ``PathEnum`` class (``path_enum``) for cleaner path management.
+- Read package metadata (version, author, etc.) via ``importlib.metadata`` instead of a generated ``_version.py`` file.
+
+**Miscellaneous**
+
+- Migrate from ``poetry`` to ``uv`` for dependency management; replace ``poetry.lock`` / ``pyproject.toml`` poetry sections with ``uv.lock``.
+- Replace ``Makefile`` / ``bin/`` scripts with ``mise.toml`` task definitions powered by ``mise-en-place``.
+- Update ``docs/source/conf.py`` to read package metadata from the installed distribution.
+
+
 3.0.0 (2025-04-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **💥Breaking Change**

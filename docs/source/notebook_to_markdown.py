@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
-from docfly.paths import dir_docs_source, dir_venv_bin
+from docfly.paths import path_enum
 
-bin_jupyter = dir_venv_bin / "jupyter"
+bin_jupyter = path_enum.dir_venv_bin / "jupyter"
 
-for path_notebook in dir_docs_source.glob("**/*.ipynb"):
+for path_notebook in path_enum.dir_docs_source.glob("**/*.ipynb"):
     if ".ipynb_checkpoints" in str(path_notebook):
         continue
     path_markdown = path_notebook.parent / f"{path_notebook.stem}.md"
