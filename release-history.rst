@@ -15,7 +15,14 @@ Backlog (TODO)
 **Miscellaneous**
 
 
-3.0.2 (2026-04-05)
+3.0.3 (2026-04-05)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Bugfixes**
+
+- Add ``[tool.setuptools.package-data]`` to ``pyproject.toml`` so that ``template/*.tpl`` files are included in the built distribution. Without this, the installed package could not locate template files at runtime.
+
+
+3.0.2 (2026-04-05) **[YANKED]**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**
 
@@ -23,7 +30,7 @@ Backlog (TODO)
 - In ``template/__init__.py``, replace ``path_enum.dir_package`` with a local ``dir_here = Path(__file__).absolute().parent`` to resolve template paths, removing the dependency on ``path_enum`` from ``..paths``.
 
 
-3.0.1 (2026-04-04)
+3.0.1 (2026-04-04) **[YANKED]**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**
 
