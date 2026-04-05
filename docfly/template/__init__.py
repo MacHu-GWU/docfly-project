@@ -7,21 +7,22 @@ Jinja2 Template rendering module for Sphinx documentation generation.
 
 import typing as T
 import dataclasses
+from pathlib import Path
 
 from jinja2 import Template
 from picage.api import Package, Module
 
-from ..paths import path_enum
-
 if T.TYPE_CHECKING:  # pragma: no cover
     from ..autotoctree import PageFolder
+
+dir_here = Path(__file__).absolute().parent
 
 
 def get_template(name: str) -> Template:
     """
     Load a Jinja2 template by name from the template directory.
     """
-    path = path_enum.dir_package.joinpath("template", f"{name}.tpl")
+    path = dir_here.joinpath(f"{name}.tpl")
     return Template(path.read_text(encoding="utf-8"))
 
 

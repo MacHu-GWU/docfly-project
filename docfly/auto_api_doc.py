@@ -17,12 +17,13 @@ import dataclasses
 from pathlib import Path
 from functools import cached_property
 
+from picage.api import Package
+
 from .template import (
     render_module,
     PackageTemplateParams,
     render_package,
 )
-from picage.api import Package
 
 
 def normalize_ignore_patterns(patterns: list[str]) -> list[str]:
