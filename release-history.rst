@@ -15,6 +15,14 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+3.0.2 (2026-04-05)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minor Improvements**
+
+- Fix import ordering in ``auto_api_doc.py``: move ``from picage.api import Package`` before local imports.
+- In ``template/__init__.py``, replace ``path_enum.dir_package`` with a local ``dir_here = Path(__file__).absolute().parent`` to resolve template paths, removing the dependency on ``path_enum`` from ``..paths``.
+
+
 3.0.1 (2026-04-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**
